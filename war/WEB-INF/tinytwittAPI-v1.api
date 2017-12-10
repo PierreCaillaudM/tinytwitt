@@ -130,21 +130,6 @@
         "body" : "empty"
       }
     },
-    "tinytwittAPI.setGoogleUser" : {
-      "path" : "setGoogleUser",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.setGoogleUser",
-      "request" : {
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
     "tinytwittAPI.getUser" : {
       "path" : "utilisateur/{login}",
       "httpMethod" : "GET",
@@ -233,8 +218,6 @@
         }
       },
       "projetwcd.TinytwittEndpoint.insertTweet" : {
-      },
-      "projetwcd.TinytwittEndpoint.setGoogleUser" : {
       },
       "projetwcd.TinytwittEndpoint.getUser" : {
         "response" : {

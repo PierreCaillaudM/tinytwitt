@@ -64,45 +64,6 @@ public class TinytwittEndpoint {
 			ds.put(userFollowersEntity);
 		}
 	}
-	/**
-	 * This method is used for inserting a new user. If user already
-	 * exists, an exception is thrown
-	 *
-	 * @param user user to insert
-	 */
-	@ApiMethod(name = "setGoogleUser")
-	public void setGoogleUser(User user) {
-		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-		//UserService userService = UserServiceFactory.getUserService();
-		if (user.getEmail() == null){throw new EntityNotFoundException("Email null");}
-		Filter filter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, user.getEmail());
-		Query query = new Query("User").
-				setAncestor(KeyFactory.createKey("Table", "tableUser")).
-				setFilter(filter);
-		Entity userEntity = ds.prepare(query).asSingleEntity();
-		if (userEntity == null){
-			//throw new EntityNotFoundException("User not found");
-			Utilisateur util;
-			util.setEmail("");
-			//insertUser()
-		}
-		else{
-			userEntity = new Entity("User",KeyFactory.createKey("Table", "tableUser"));;
-			userEntity.setIndexedProperty("login", user.getLogin());
-			userEntity.setProperty("email", user.getEmail());
-			userEntity.setProperty("mdp", user.getMdp());
-			userEntity.setProperty("prenom", user.getPrenom());
-			userEntity.setProperty("nom", user.getNom());
-			//userEntity.setProperty("followers", new ArrayList<Long>());
-			ds.put(userEntity);
-			Entity userFollowersEntity = new Entity("UserFollowers",userEntity.getKey());
-			userFollowersEntity.setProperty("followers", new ArrayList<Long>());
-			//ArrayList<Entity> entities = new ArrayList<Entity>();
-			//entities.add(userEntity);
-			//entities.add(userFollowersEntity);
-			ds.put(userFollowersEntity);
-		}
-	}
 
 	/**
 	 * This method is used for getting an existing user. If the user does not
