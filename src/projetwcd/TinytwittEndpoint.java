@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
+import projetwcd.beans.Tweet;
 import projetwcd.beans.Utilisateur;
 
 import com.google.api.server.spi.config.Api;
@@ -18,11 +19,11 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
-import com.google.appengine.api.users.*;
 
 @Api(name = "tinytwittAPI", namespace = @ApiNamespace(ownerDomain = "mycompany.com", ownerName = "mycompany.com", packagePath = "services"))
 public class TinytwittEndpoint {
@@ -208,6 +209,41 @@ public class TinytwittEndpoint {
 		Entity tweetIndex = new Entity("TweetIndex", tweet.getKey());
 		tweetIndex.setProperty("receivers", followers);
 		ds.put(tweetIndex);		
+	}
+	
+	/**
+	 * This method is used for inserting a new tweet.
+	 *
+	 * @param author author of the tweet
+	 * @param message content of the tweet
+	 */
+	@ApiMethod(name = "getTimelineOf")
+	public List<Tweet> getTimelineOf(@Named("login") String login) {
+		//On recup l'user avec le login
+		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login);
+		Query query = new Query("User").
+				setAncestor(KeyFactory.createKey("Table", "tableUser")).
+				setFilter(filter);
+		Entity userEntity = ds.prepare(query).asSingleEntity();
+		if (userEntity == null){throw new EntityNotFoundException("User not found");}
+		//On recup son id
+		Long id = userEntity.getKey().getId();
+		
+		//On recup les keys des twitts de la timeline
+		filter = new Query.FilterPredicate( "receivers" , Query.FilterOperator.IN, id);
+		query = new Query("TweetIndex").
+				setFilter(filter).setKeysOnly();
+		Iterable<Entity> twittKeysEntity = ds.prepare(query).asIterable();
+		ArrayList<Key> keys = new ArrayList<Key>();
+		for(Entity e : twittKeysEntity){
+			Key k = e.getKey();
+			keys.add(k);
+		}
+		
+		List<Tweet> result = (List<Tweet>) ds.get(keys);// Ca marche ça ?
+		
+		return result;
 	}
 
 	/**
