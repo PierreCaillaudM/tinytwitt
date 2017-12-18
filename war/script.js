@@ -1,18 +1,19 @@
-var app = angular.module('twitter',[]).controller('TController',['$scope','$window',
+var app = angular.module('twitt',[]).controller('TController',['$scope','$window',
  function($scope, $window){
 	
 	$scope.twitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
-	$scope.sauthor;
+	$scope.author;
 	$scope.smessage;
-	$scope.login = 'null';
+	$scope.login ='';
+	$scope.log = 0;
 	
 	$scope.connection = function(nom){
-		$scope.login = nom;
-		console.log($scope.login);
+		$scope.author = nom;
+		$scope.log = 1;
 	}
 	
 	$scope.listeTwitt = function(){
-		if($scope.login != 'null'){
+		if($scope.login != ''){
 			gapi.client.TinytwittEndpoint.getTweetsOf($scope.login).execute(
 					function(resp){
 						$scope.twitt = resp.items;
@@ -25,9 +26,10 @@ var app = angular.module('twitter',[]).controller('TController',['$scope','$wind
 	
 	$window.init = function() {
 	      console.log("windowinit called");
-	      var rootApi = 'https://tiny-twitt.appspot.com/_ah/api/';
-	      gapi.client.load('TinytwittEndpoint', 'v1', function() {
+	      var rootApi = 'https://tiny-twitt.appspot.com/';
+	      gapi.client.load('tinytwittAPI', 'v1', function() {
 	        console.log("twitt api loaded");
+	        $scope.log = 0;
 	      }, rootApi);
 	 }
  }                                                             
