@@ -9,6 +9,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.google.appengine.api.datastore.Entity;
+
 @PersistenceCapable(identityType=IdentityType.APPLICATION)
 public class Tweet implements Serializable{
 	@PrimaryKey
@@ -24,6 +26,13 @@ public class Tweet implements Serializable{
 	private int likes;
 
 	public Tweet() {}
+	
+	public Tweet(Entity e) {
+		//this.author = (Utilisateur) e.getProperty("author");
+		this.message = (String) e.getProperty("message");
+		this.date = (Date) e.getProperty("date");
+		//this.likes = (int) e.getProperty("likes");
+	}
 	
 	public Long getId() {
 		return id;

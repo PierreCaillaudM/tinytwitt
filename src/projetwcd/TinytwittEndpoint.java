@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -214,8 +215,8 @@ public class TinytwittEndpoint {
 	/**
 	 * This method is used for inserting a new tweet.
 	 *
-	 * @param author author of the tweet
-	 * @param message content of the tweet
+	 * @param login user
+	 * @return List of tweets
 	 */
 	@ApiMethod(name = "getTimelineOf")
 	public List<Tweet> getTimelineOf(@Named("login") String login) {
@@ -231,19 +232,30 @@ public class TinytwittEndpoint {
 		Long id = userEntity.getKey().getId();
 		
 		//On recup les keys des twitts de la timeline
-		filter = new Query.FilterPredicate( "receivers" , Query.FilterOperator.IN, id);
+		filter = new Query.FilterPredicate( "receivers" , Query.FilterOperator.EQUAL , id);
 		query = new Query("TweetIndex").
 				setFilter(filter).setKeysOnly();
-		Iterable<Entity> twittKeysEntity = ds.prepare(query).asIterable();
+		List<Entity> twittKeysEntity = ds.prepare(query).asList(FetchOptions.Builder.withDefaults());
+		if(twittKeysEntity == null){throw new EntityNotFoundException("No tweet found");}
+		
 		ArrayList<Key> keys = new ArrayList<Key>();
 		for(Entity e : twittKeysEntity){
-			Key k = e.getKey();
+			Key k = e.getParent();
 			keys.add(k);
+		}// Jusque la c'est bon 
+		
+		
+		Map<Key, Entity> map = ds.get(keys);
+		List<Entity> list = new ArrayList<Entity>(map.values());
+		
+		List<Tweet> result = new ArrayList<Tweet>();
+		for(Entity e : list){
+			result.add(new Tweet(e));
 		}
 		
-		List<Tweet> result = (List<Tweet>) ds.get(keys);// Ca marche ça ?
+		//List<Tweet> result = (List<Tweet>) list;// Ca marche ça ?
 		
-		return result;
+		return result;//list;
 	}
 
 	/**
