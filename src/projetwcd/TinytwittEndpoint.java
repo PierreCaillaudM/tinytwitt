@@ -29,6 +29,47 @@ import com.google.appengine.api.datastore.Query.Filter;
 @Api(name = "tinytwittAPI", namespace = @ApiNamespace(ownerDomain = "mycompany.com", ownerName = "mycompany.com", packagePath = "services"))
 public class TinytwittEndpoint {
 
+
+
+	/**
+	 * This method is used for creating a new user. If user already
+	 * exists, an exception is thrown
+	 *
+	 * @param 
+	 */
+	@ApiMethod(name = "createUser")
+	public Entity createUser(@Named("login") String login, @Named("mail") String mail, @Named("mdp") String mdp, @Named("prenom") String prenom, @Named("nom") String nom) {
+		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+		//UserService userService = UserServiceFactory.getUserService();
+		Collection<Filter> filters = new ArrayList<Filter>();
+		filters.add(new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login));
+		filters.add(new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, mail));
+		Filter filter = new Query.CompositeFilter(CompositeFilterOperator.OR, filters);
+		Query query = new Query("User").
+				setAncestor(KeyFactory.createKey("Table", "tableUser")).
+				setFilter(filter);
+		Entity userEntity = ds.prepare(query).asSingleEntity();
+		if (userEntity != null){
+			throw new EntityExistsException("User already exists");
+		}else{
+			userEntity = new Entity("User",KeyFactory.createKey("Table", "tableUser"));;
+			userEntity.setIndexedProperty("login", login);
+			userEntity.setProperty("email", mail);
+			userEntity.setProperty("mdp", mdp);
+			userEntity.setProperty("prenom", prenom);
+			userEntity.setProperty("nom", nom);
+			//userEntity.setProperty("followers", new ArrayList<Long>());
+			ds.put(userEntity);
+			Entity userFollowersEntity = new Entity("UserFollowers",userEntity.getKey());
+			userFollowersEntity.setProperty("followers", new ArrayList<Long>());
+			//ArrayList<Entity> entities = new ArrayList<Entity>();
+			//entities.add(userEntity);
+			//entities.add(userFollowersEntity);
+			ds.put(userFollowersEntity);
+			return userFollowersEntity;
+		}
+	}
+	
 	/**
 	 * This method is used for inserting a new user. If user already
 	 * exists, an exception is thrown
