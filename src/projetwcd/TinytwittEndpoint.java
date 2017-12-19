@@ -195,7 +195,7 @@ public class TinytwittEndpoint {
 		if (userEntity == null){throw new EntityNotFoundException("User not found");}
 		
 		Entity tweet = new Entity("Tweet");
-		tweet.setProperty("author", userEntity.getKey().getId());
+		tweet.setProperty("author", (String) userEntity.getProperty("login"));
 		tweet.setProperty("message", message);
 		tweet.setProperty("date", new Date());
 		tweet.setProperty("likes", 0);
@@ -242,8 +242,7 @@ public class TinytwittEndpoint {
 		for(Entity e : twittKeysEntity){
 			Key k = e.getParent();
 			keys.add(k);
-		}// Jusque la c'est bon 
-		
+		}
 		
 		Map<Key, Entity> map = ds.get(keys);
 		List<Entity> list = new ArrayList<Entity>(map.values());
@@ -253,31 +252,7 @@ public class TinytwittEndpoint {
 			result.add(new Tweet(e));
 		}
 		
-		//List<Tweet> result = (List<Tweet>) list;// Ca marche ça ?
-		
-		return result;//list;
+		return result;
 	}
-
-	/**
-	 * This method is used for getting a list of tweets. If the user does not
-	 * exist in the datastore, an exception is thrown.
-	 *
-	 * @param login login of the user
-	 * @return The list of user's tweets
-	 */
-	/*@ApiMethod(name = "getTweetsOf")
-	public List<Tweet> getTweetsOf(User author) {
-		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login);
-		Query query = new Query("User").
-				setAncestor(KeyFactory.createKey("Table", "tableUser")).
-				setFilter(filter);
-		Entity userEntity = ds.prepare(query).asSingleEntity();
-		if (userEntity == null){
-			throw new EntityNotFoundException("User not found");
-		}
-		User user = new User(userEntity);
-		return user;
-	}*/
 
 }
