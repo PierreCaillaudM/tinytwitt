@@ -8,14 +8,17 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	$scope.newUser = {};
 	$scope.log = 0;
 	
+	// Ajoute l'utilisateur saisie en variable local
 	$scope.connection = function(nom){
 		$scope.author = nom;
 		$scope.log = 1;
+//		console.log($scope.author);
 	}
+	
 	
 	$scope.listeTwitt = function(){
 		if($scope.log == 1){
-			gapi.client.tinytwittAPI.getTweetsOf($scope.login).execute(
+			gapi.client.tinytwittAPI.getTimelineOf($scope.login).execute(
 					function(resp){
 						$scope.twitt = resp.items;
 						$scope.$apply();
@@ -25,31 +28,49 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 		}
 	}
 	
-//	$scope.postTwitt = function(messageTwitt){
-//		if($scope.log == 1 && gapi.client.tinytwittAPI.getUser($scope.login)){
-//			gapi.client.tinytwittAPI.insertTweet($scope.login,$scope.smessage).execute(
-//				function(resp){
-//					console.log(resp);
-//					$scope.twitt.push({
-//						author: $scope.login;
-//						message: $scope.smessage;
-//					});
-//					$scope.$apply();
-//				}		
-//			)
-//		}
-//	}
-//	
-	$scope.inscription = function(user){
-		if($scope.log == 0){
-			$scope.newUser = angular.copy(user);
-			console.log($scope.newUser);
+	$scope.postTwitt = function(){
+		if($scope.log == 1 ){
+			gapi.client.tinytwittAPI.insertTweet($scope.login,$scope.smessage).execute(
+				function(resp){
+					console.log(resp);
+					$scope.twitt.push({
+						author: $scope.login,
+						message: $scope.smessage
+					});
+					$scope.$apply();
+				}		
+			)
 		}
 	}
 	
+	// Ajoute un follower a l'utilisateur courant, SI un utilisateur courant est actif, et que le pseudo
+	// a suivre existe
+	$scope.addFollow = function(author){
+		if($scope.log == 1){
+			gapi.client.tinytwittAPI.getUser(author).execute(
+					function(resp){
+						if(resp.login == author){
+							gapi.client.tinytwittAPI.addFollower(author,$scope.login);
+						}
+					}
+			)
+		}
+	}
+	
+	// Copie le formulaire dans une variable et l'ajoute au datastore
+	$scope.inscription = function(user){
+		if($scope.log == 0){
+			angular.copy(user,$scope.newUser);
+//			console.log($scope.newUser);
+			gapi.client.tinytwittAPI.insertUser($scope.newUser);
+			$scope.log = 1;
+		}
+	}
+	
+	// Idée d'astuce de pascal Molli pour s'assurer du chargement d'angular
 	$window.init = function() {
 	      console.log("windowinit called");
-	      var rootApi = 'https://tiny-twitt.appspot.com/';
+	      var rootApi = 'https://tiny-twitt.appspot.com/_ah/api/';
 	      gapi.client.load('tinytwittAPI', 'v1', function() {
 	        console.log("twitt api loaded");
 	        $scope.log = 0;
