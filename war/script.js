@@ -88,7 +88,9 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 				nom: $scope.usernom
 			}).execute(function(resp){
 				console.log(resp);
+				console.log("User created");
 			});
+			
 			$scope.log = 1;
 		}	
 	}

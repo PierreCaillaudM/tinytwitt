@@ -283,7 +283,7 @@ public class TinytwittEndpoint {
 			
           int j = (int)Math.floor(Math.random() * 62);
           int k = (int)Math.floor(Math.random() * 62);
-		  login +=  "user" + chars.charAt(j) + chars.charAt(k);
+		  login =  "user" + chars.charAt(j) + chars.charAt(k);
 		  email = "mail" + chars.charAt(j) + chars.charAt(k) + "@mymail.com";
 		  mdp = "password" + chars.charAt(j) + chars.charAt(k);
 		  prenom = "prenom" + chars.charAt(j) + chars.charAt(k);
