@@ -5,7 +5,11 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	$scope.author;
 	$scope.smessage;
 	$scope.login ='';
-	$scope.newUser = {};
+	$scope.userlogin ='';
+	$scope.usermail ='';
+	$scope.usermdp ='';
+	$scope.userprenom ='';
+	$scope.usernom ='';
 	$scope.log = 0;
 	
 	// Ajoute l'utilisateur saisie en variable local
@@ -58,13 +62,24 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	}
 	
 	// Copie le formulaire dans une variable et l'ajoute au datastore
-	$scope.inscription = function(user){
-		if($scope.log == 0){
-			angular.copy(user,$scope.newUser);
-//			console.log($scope.newUser);
-			gapi.client.tinytwittAPI.insertUser($scope.newUser);
-			$scope.log = 1;
-		}
+	$scope.inscription = function(){
+		console.log($scope.userlogin);
+		console.log($scope.usermail);
+		console.log($scope.usermdp);
+		console.log($scope.userprenom);
+		console.log($scope.usernom);
+		gapi.client.tinytwittAPI.createUser({
+			login: $scope.userlogin,
+			mail: $scope.usermail,
+			mdp: $scope.usermdp,
+			prenom: $scope.userprenom,
+			nom: $scope.usernom
+		}).execute(function(resp){
+			console.log(resp);
+		});
+		console.log("test");
+		$scope.log = 1;
+		
 	}
 	
 	// Idée d'astuce de pascal Molli pour s'assurer du chargement d'angular

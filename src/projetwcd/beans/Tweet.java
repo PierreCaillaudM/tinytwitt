@@ -17,7 +17,8 @@ public class Tweet implements Serializable{
 	@Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
 	Long id;
 	@Persistent
-	private Utilisateur author;
+	//private Utilisateur author;
+	private String author;
 	@Persistent
 	private String message;
 	@Persistent
@@ -28,7 +29,7 @@ public class Tweet implements Serializable{
 	public Tweet() {}
 	
 	public Tweet(Entity e) {
-		//this.author = (Utilisateur) e.getProperty("author");
+		this.author = (String) e.getProperty("author");
 		this.message = (String) e.getProperty("message");
 		this.date = (Date) e.getProperty("date");
 		//this.likes = (int) e.getProperty("likes");
@@ -40,11 +41,11 @@ public class Tweet implements Serializable{
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Utilisateur getAuthor() {
+	public String getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(Utilisateur author) {
+	public void setAuthor(String author) {
 		this.author = author;
 	}
 

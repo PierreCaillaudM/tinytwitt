@@ -29,6 +29,47 @@ import com.google.appengine.api.datastore.Query.Filter;
 @Api(name = "tinytwittAPI", namespace = @ApiNamespace(ownerDomain = "mycompany.com", ownerName = "mycompany.com", packagePath = "services"))
 public class TinytwittEndpoint {
 
+
+
+	/**
+	 * This method is used for creating a new user. If user already
+	 * exists, an exception is thrown
+	 *
+	 * @param 
+	 */
+	@ApiMethod(name = "createUser")
+	public Entity createUser(@Named("login") String login, @Named("mail") String mail, @Named("mdp") String mdp, @Named("prenom") String prenom, @Named("nom") String nom) {
+		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+		//UserService userService = UserServiceFactory.getUserService();
+		Collection<Filter> filters = new ArrayList<Filter>();
+		filters.add(new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login));
+		filters.add(new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, mail));
+		Filter filter = new Query.CompositeFilter(CompositeFilterOperator.OR, filters);
+		Query query = new Query("User").
+				setAncestor(KeyFactory.createKey("Table", "tableUser")).
+				setFilter(filter);
+		Entity userEntity = ds.prepare(query).asSingleEntity();
+		if (userEntity != null){
+			throw new EntityExistsException("User already exists");
+		}else{
+			userEntity = new Entity("User",KeyFactory.createKey("Table", "tableUser"));;
+			userEntity.setIndexedProperty("login", login);
+			userEntity.setProperty("email", mail);
+			userEntity.setProperty("mdp", mdp);
+			userEntity.setProperty("prenom", prenom);
+			userEntity.setProperty("nom", nom);
+			//userEntity.setProperty("followers", new ArrayList<Long>());
+			ds.put(userEntity);
+			Entity userFollowersEntity = new Entity("UserFollowers",userEntity.getKey());
+			userFollowersEntity.setProperty("followers", new ArrayList<Long>());
+			//ArrayList<Entity> entities = new ArrayList<Entity>();
+			//entities.add(userEntity);
+			//entities.add(userFollowersEntity);
+			ds.put(userFollowersEntity);
+			return userFollowersEntity;
+		}
+	}
+	
 	/**
 	 * This method is used for inserting a new user. If user already
 	 * exists, an exception is thrown
@@ -195,7 +236,7 @@ public class TinytwittEndpoint {
 		if (userEntity == null){throw new EntityNotFoundException("User not found");}
 		
 		Entity tweet = new Entity("Tweet");
-		tweet.setProperty("author", userEntity.getKey().getId());
+		tweet.setProperty("author", (String) userEntity.getProperty("login"));
 		tweet.setProperty("message", message);
 		tweet.setProperty("date", new Date());
 		tweet.setProperty("likes", 0);
@@ -242,8 +283,7 @@ public class TinytwittEndpoint {
 		for(Entity e : twittKeysEntity){
 			Key k = e.getParent();
 			keys.add(k);
-		}// Jusque la c'est bon 
-		
+		}
 		
 		Map<Key, Entity> map = ds.get(keys);
 		List<Entity> list = new ArrayList<Entity>(map.values());
@@ -253,31 +293,7 @@ public class TinytwittEndpoint {
 			result.add(new Tweet(e));
 		}
 		
-		//List<Tweet> result = (List<Tweet>) list;// Ca marche ça ?
-		
-		return result;//list;
+		return result;
 	}
-
-	/**
-	 * This method is used for getting a list of tweets. If the user does not
-	 * exist in the datastore, an exception is thrown.
-	 *
-	 * @param login login of the user
-	 * @return The list of user's tweets
-	 */
-	/*@ApiMethod(name = "getTweetsOf")
-	public List<Tweet> getTweetsOf(User author) {
-		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login);
-		Query query = new Query("User").
-				setAncestor(KeyFactory.createKey("Table", "tableUser")).
-				setFilter(filter);
-		Entity userEntity = ds.prepare(query).asSingleEntity();
-		if (userEntity == null){
-			throw new EntityNotFoundException("User not found");
-		}
-		User user = new User(userEntity);
-		return user;
-	}*/
 
 }
