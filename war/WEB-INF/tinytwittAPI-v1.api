@@ -28,6 +28,27 @@
   "ownerName" : "mycompany.com",
   "packagePath" : "services",
   "methods" : {
+    "tinytwittAPI.getUser" : {
+      "path" : "utilisateur/{login}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "projetwcd.TinytwittEndpoint.getUser",
+      "request" : {
+        "parameters" : {
+          "login" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "tinytwittAPI.createUser" : {
       "path" : "createUser/{login}/{mail}/{mdp}/{prenom}/{nom}",
       "httpMethod" : "POST",
@@ -65,6 +86,58 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
+    "tinytwittAPI.insertUser" : {
+      "path" : "void",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "projetwcd.TinytwittEndpoint.insertUser",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "tinytwittAPI.getTimelineOf" : {
+      "path" : "tweetcollection/{login}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "projetwcd.TinytwittEndpoint.getTimelineOf",
+      "request" : {
+        "parameters" : {
+          "login" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "tinytwittAPI.getUserList" : {
+      "path" : "utilisateurcollection",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "projetwcd.TinytwittEndpoint.getUserList",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "tinytwittAPI.deleteUser" : {
       "path" : "user/{login}",
       "httpMethod" : "DELETE",
@@ -76,6 +149,31 @@
       "request" : {
         "parameters" : {
           "login" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "tinytwittAPI.insertTweet" : {
+      "path" : "void/{login}/{message}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "projetwcd.TinytwittEndpoint.insertTweet",
+      "request" : {
+        "parameters" : {
+          "login" : {
+            "type" : "string",
+            "required" : true
+          },
+          "message" : {
             "type" : "string",
             "required" : true
           }
@@ -110,167 +208,10 @@
       "response" : {
         "body" : "empty"
       }
-    },
-    "tinytwittAPI.insertUser" : {
-      "path" : "void",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.insertUser",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
-    "tinytwittAPI.getUserList" : {
-      "path" : "utilisateurcollection",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.getUserList",
-      "request" : {
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "tinytwittAPI.insertTweet" : {
-      "path" : "void/{login}/{message}",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.insertTweet",
-      "request" : {
-        "parameters" : {
-          "login" : {
-            "type" : "string",
-            "required" : true
-          },
-          "message" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
-    "tinytwittAPI.getTimelineOf" : {
-      "path" : "tweetcollection/{login}",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.getTimelineOf",
-      "request" : {
-        "parameters" : {
-          "login" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "tinytwittAPI.getUser" : {
-      "path" : "utilisateur/{login}",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.getUser",
-      "request" : {
-        "parameters" : {
-          "login" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
     }
   },
   "descriptor" : {
     "schemas" : {
-      "Entity" : {
-        "id" : "Entity",
-        "type" : "object",
-        "properties" : {
-          "key" : {
-            "$ref" : "Key"
-          },
-          "appId" : {
-            "type" : "string"
-          },
-          "kind" : {
-            "type" : "string"
-          },
-          "propertiesFrom" : {
-            "$ref" : "Entity"
-          },
-          "namespace" : {
-            "type" : "string"
-          },
-          "parent" : {
-            "$ref" : "Key"
-          },
-          "properties" : {
-            "$ref" : "JsonMap"
-          }
-        }
-      },
-      "Key" : {
-        "id" : "Key",
-        "type" : "object",
-        "properties" : {
-          "kind" : {
-            "type" : "string"
-          },
-          "appId" : {
-            "type" : "string"
-          },
-          "id" : {
-            "type" : "string",
-            "format" : "int64"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "namespace" : {
-            "type" : "string"
-          },
-          "complete" : {
-            "type" : "boolean"
-          },
-          "parent" : {
-            "$ref" : "Key"
-          }
-        }
-      },
-      "JsonMap" : {
-        "id" : "JsonMap",
-        "type" : "object"
-      },
       "Utilisateur" : {
         "id" : "Utilisateur",
         "type" : "object",
@@ -306,17 +247,64 @@
           }
         }
       },
-      "UtilisateurCollection" : {
-        "id" : "UtilisateurCollection",
+      "Entity" : {
+        "id" : "Entity",
         "type" : "object",
         "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "Utilisateur"
-            }
+          "key" : {
+            "$ref" : "Key"
+          },
+          "parent" : {
+            "$ref" : "Key"
+          },
+          "namespace" : {
+            "type" : "string"
+          },
+          "kind" : {
+            "type" : "string"
+          },
+          "propertiesFrom" : {
+            "$ref" : "Entity"
+          },
+          "appId" : {
+            "type" : "string"
+          },
+          "properties" : {
+            "$ref" : "JsonMap"
           }
         }
+      },
+      "Key" : {
+        "id" : "Key",
+        "type" : "object",
+        "properties" : {
+          "kind" : {
+            "type" : "string"
+          },
+          "appId" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "parent" : {
+            "$ref" : "Key"
+          },
+          "namespace" : {
+            "type" : "string"
+          },
+          "complete" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "JsonMap" : {
+        "id" : "JsonMap",
+        "type" : "object"
       },
       "Tweet" : {
         "id" : "Tweet",
@@ -352,21 +340,39 @@
             }
           }
         }
+      },
+      "UtilisateurCollection" : {
+        "id" : "UtilisateurCollection",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Utilisateur"
+            }
+          }
+        }
       }
     },
     "methods" : {
+      "projetwcd.TinytwittEndpoint.getUser" : {
+        "response" : {
+          "$ref" : "Utilisateur"
+        }
+      },
       "projetwcd.TinytwittEndpoint.createUser" : {
         "response" : {
           "$ref" : "Entity"
         }
       },
-      "projetwcd.TinytwittEndpoint.deleteUser" : {
-      },
-      "projetwcd.TinytwittEndpoint.addFollower" : {
-      },
       "projetwcd.TinytwittEndpoint.insertUser" : {
         "request" : {
           "$ref" : "Utilisateur"
+        }
+      },
+      "projetwcd.TinytwittEndpoint.getTimelineOf" : {
+        "response" : {
+          "$ref" : "TweetCollection"
         }
       },
       "projetwcd.TinytwittEndpoint.getUserList" : {
@@ -374,17 +380,11 @@
           "$ref" : "UtilisateurCollection"
         }
       },
+      "projetwcd.TinytwittEndpoint.deleteUser" : {
+      },
       "projetwcd.TinytwittEndpoint.insertTweet" : {
       },
-      "projetwcd.TinytwittEndpoint.getTimelineOf" : {
-        "response" : {
-          "$ref" : "TweetCollection"
-        }
-      },
-      "projetwcd.TinytwittEndpoint.getUser" : {
-        "response" : {
-          "$ref" : "Utilisateur"
-        }
+      "projetwcd.TinytwittEndpoint.addFollower" : {
       }
     }
   }
