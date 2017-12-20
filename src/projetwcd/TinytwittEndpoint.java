@@ -37,7 +37,7 @@ public class TinytwittEndpoint {
 	 * @param 
 	 */
 	@ApiMethod(name = "createUser")
-	public Entity createUser(@Named("login") String login, @Named("mail") String mail, @Named("mdp") String mdp, @Named("prenom") String prenom, @Named("nom") String nom) {
+	public void createUser(@Named("login") String login, @Named("mail") String mail, @Named("mdp") String mdp, @Named("prenom") String prenom, @Named("nom") String nom) {
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 		//UserService userService = UserServiceFactory.getUserService();
 		Collection<Filter> filters = new ArrayList<Filter>();
@@ -65,7 +65,6 @@ public class TinytwittEndpoint {
 			//entities.add(userEntity);
 			//entities.add(userFollowersEntity);
 			ds.put(userFollowersEntity);
-			return userFollowersEntity;
 		}
 	}
 	
@@ -224,6 +223,7 @@ public class TinytwittEndpoint {
 		return users;
 	}
 	
+	
 	/**
 	 * This method is used for getting all follower for a user. If no entity
 	 * exists in the datastore, it return null
@@ -231,12 +231,17 @@ public class TinytwittEndpoint {
 	 * @return A list of user. null if not found
 	 */
 	@ApiMethod(name = "getUserFollowerList")
-	public List<Utilisateur> getUserFollowerList() {
+	public List<Utilisateur> getUserFollowerList(@Named("login") String login) {
 		List<Utilisateur> users = new ArrayList<Utilisateur>();
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-		/*
+		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login);
 		Query query = new Query("User").
-				setAncestor(KeyFactory.createKey("Table", "tableUser"));
+				setAncestor(KeyFactory.createKey("Table", "tableUser")).
+				setFilter(filter);
+		Entity userEntity = ds.prepare(query).asSingleEntity();
+		if (userEntity == null){throw new EntityNotFoundException("User not found");}
+		
+		/*
 		List<Entity> userEntities = ds.prepare(query).asList(FetchOptions.Builder.withDefaults());
 		for(Entity entity : userEntities){
 			users.add(new Utilisateur(entity));	
@@ -274,7 +279,7 @@ public class TinytwittEndpoint {
 		@SuppressWarnings("unchecked")
 		ArrayList<Long> followers = (ArrayList<Long>) userFollowersEntity.getProperty("followers");
 		
-		Entity twittIndex = new Entity("TwitstIndex", twitt.getKey());
+		Entity twittIndex = new Entity("TwitttIndex", twitt.getKey());
 		twittIndex.setProperty("receivers", followers);
 		ds.put(twittIndex);		
 	}
@@ -322,5 +327,27 @@ public class TinytwittEndpoint {
 		
 		return result;
 	}
-
+	
+	@ApiMethod(name = "createNbUsers")
+	public void createNbUsers(@Named("nbUsers") int nbUsers) {
+		
+		String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		
+		String login = "";
+		String email = "";
+		String mdp = "";
+		String prenom = "";
+		String nom = "";
+		for(int i = 1; i <= nbUsers; i++){
+			
+          int j = (int)Math.floor(Math.random() * 62);
+          int k = (int)Math.floor(Math.random() * 62);
+		  login +=  "user" + chars.charAt(j) + chars.charAt(k);
+		  email = "mail" + chars.charAt(j) + chars.charAt(k) + "@mymail.com";
+		  mdp = "password" + chars.charAt(j) + chars.charAt(k);
+		  prenom = "prenom" + chars.charAt(j) + chars.charAt(k);
+		  nom = "nom" + chars.charAt(j) + chars.charAt(k);
+		  createUser(login, email, mdp, prenom, nom);
+		}
+	}
 }

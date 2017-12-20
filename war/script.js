@@ -1,7 +1,7 @@
 var app = angular.module('twitt',[]).controller('TController',['$scope','$window',
  function($scope, $window){
 	
-	$scope.twitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
+	$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
 	$scope.author;
 	$scope.smessage;
 	$scope.login ='';
@@ -16,8 +16,8 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	// Ajoute l'utilisateur saisie en variable local
 	$scope.connection = function(){
 		$scope.author = $scope.login;
+		$scope.listeTwitt();
 		$scope.log = 1;
-		window.open
 		console.log($scope.author);
 		console.log(" is connected");
 	}
@@ -28,9 +28,12 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 			gapi.client.tinytwittAPI.getTimelineOf({
 				login: $scope.author
 			}).execute(function(resp){
-				$scope.twitt = resp.items;
-				$scope.$apply();
 				console.log(resp);
+				$scope.listtwitt = resp.items;
+				if($scope.listtwitt == null){
+					$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
+				}
+				$scope.$apply();
 				console.log("List updated");
 			});
 		}
@@ -45,8 +48,8 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 			}).execute(
 				function(resp){
 					console.log(resp);
-					$scope.twitt.push({
-						author: $scope.login,
+					$scope.listtwitt.push({
+						author: $scope.author,
 						message: $scope.smessage
 					});
 					$scope.$apply();
