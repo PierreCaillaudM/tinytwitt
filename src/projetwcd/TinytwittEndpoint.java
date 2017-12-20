@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
-import projetwcd.beans.Tweet;
+import projetwcd.beans.Twitt;
 import projetwcd.beans.Utilisateur;
 
 import com.google.api.server.spi.config.Api;
@@ -29,8 +29,7 @@ import com.google.appengine.api.datastore.Query.Filter;
 @Api(name = "tinytwittAPI", namespace = @ApiNamespace(ownerDomain = "mycompany.com", ownerName = "mycompany.com", packagePath = "services"))
 public class TinytwittEndpoint {
 
-
-
+	
 	/**
 	 * This method is used for creating a new user. If user already
 	 * exists, an exception is thrown
@@ -38,7 +37,7 @@ public class TinytwittEndpoint {
 	 * @param 
 	 */
 	@ApiMethod(name = "createUser")
-	public Entity createUser(@Named("login") String login, @Named("mail") String mail, @Named("mdp") String mdp, @Named("prenom") String prenom, @Named("nom") String nom) {
+	public void createUser(@Named("login") String login, @Named("mail") String mail, @Named("mdp") String mdp, @Named("prenom") String prenom, @Named("nom") String nom) {
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 		//UserService userService = UserServiceFactory.getUserService();
 		Collection<Filter> filters = new ArrayList<Filter>();
@@ -66,9 +65,9 @@ public class TinytwittEndpoint {
 			//entities.add(userEntity);
 			//entities.add(userFollowersEntity);
 			ds.put(userFollowersEntity);
-			return userFollowersEntity;
 		}
 	}
+	
 	
 	/**
 	 * This method is used for inserting a new user. If user already
@@ -108,6 +107,7 @@ public class TinytwittEndpoint {
 		}
 	}
 
+	
 	/**
 	 * This method is used for getting an existing user. If the user does not
 	 * exist in the datastore, an exception is thrown.
@@ -129,6 +129,8 @@ public class TinytwittEndpoint {
 		Utilisateur user = new Utilisateur(userEntity);
 		return user;
 	}
+	
+	
 	/**
 	 * This method is used for deleting an existing user. If the user does not
 	 * exist in the datastore, an exception is thrown.
@@ -150,6 +152,7 @@ public class TinytwittEndpoint {
 		}
 	}
 
+	
 	/**
 	 * This method is used for adding a follower to the user. If the user does not
 	 * exist in the datastore, an exception is thrown.
@@ -198,8 +201,9 @@ public class TinytwittEndpoint {
 			userFollowers.setProperty("followers", followers);
 			ds.put(userFollowers);
 		}
-		
 	}
+	
+	
 	/**
 	 * This method is used for getting all existing users. If no entity
 	 * exists in the datastore, it return null
@@ -218,15 +222,17 @@ public class TinytwittEndpoint {
 		}
 		return users;
 	}
-
+	
+	
 	/**
-	 * This method is used for inserting a new tweet.
+	 * This method is used for getting all follower for a user. If no entity
+	 * exists in the datastore, it return null
 	 *
-	 * @param author author of the tweet
-	 * @param message content of the tweet
+	 * @return A list of user. null if not found
 	 */
-	@ApiMethod(name = "insertTweet")
-	public void insertTweet(@Named("login") String login,@Named("message") String message) {
+	@ApiMethod(name = "getUserFollowerList")
+	public List<Utilisateur> getUserFollowerList(@Named("login") String login) {
+		List<Utilisateur> users = new ArrayList<Utilisateur>();
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login);
 		Query query = new Query("User").
@@ -235,12 +241,37 @@ public class TinytwittEndpoint {
 		Entity userEntity = ds.prepare(query).asSingleEntity();
 		if (userEntity == null){throw new EntityNotFoundException("User not found");}
 		
-		Entity tweet = new Entity("Tweet");
-		tweet.setProperty("author", (String) userEntity.getProperty("login"));
-		tweet.setProperty("message", message);
-		tweet.setProperty("date", new Date());
-		tweet.setProperty("likes", 0);
-		ds.put(tweet);
+		/*
+		List<Entity> userEntities = ds.prepare(query).asList(FetchOptions.Builder.withDefaults());
+		for(Entity entity : userEntities){
+			users.add(new Utilisateur(entity));	
+		}*/
+		return users;
+	}
+
+	
+	/**
+	 * This method is used for inserting a new twitt.
+	 *
+	 * @param author author of the twitt
+	 * @param message content of the twitt
+	 */
+	@ApiMethod(name = "insertTwitt")
+	public void insertTwitt(@Named("login") String login,@Named("message") String message) {
+		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login);
+		Query query = new Query("User").
+				setAncestor(KeyFactory.createKey("Table", "tableUser")).
+				setFilter(filter);
+		Entity userEntity = ds.prepare(query).asSingleEntity();
+		if (userEntity == null){throw new EntityNotFoundException("User not found");}
+		
+		Entity twitt = new Entity("Twitt");
+		twitt.setProperty("author", (String) userEntity.getProperty("login"));
+		twitt.setProperty("message", message);
+		twitt.setProperty("date", new Date());
+		twitt.setProperty("likes", 0);
+		ds.put(twitt);
 
 		query = new Query("UserFollowers").setAncestor(userEntity.getKey());
 		Entity userFollowersEntity = ds.prepare(query).asSingleEntity();
@@ -248,19 +279,20 @@ public class TinytwittEndpoint {
 		@SuppressWarnings("unchecked")
 		ArrayList<Long> followers = (ArrayList<Long>) userFollowersEntity.getProperty("followers");
 		
-		Entity tweetIndex = new Entity("TweetIndex", tweet.getKey());
-		tweetIndex.setProperty("receivers", followers);
-		ds.put(tweetIndex);		
+		Entity twittIndex = new Entity("TwitttIndex", twitt.getKey());
+		twittIndex.setProperty("receivers", followers);
+		ds.put(twittIndex);		
 	}
 	
+	
 	/**
-	 * This method is used for inserting a new tweet.
+	 * This method is used for inserting a new twitt.
 	 *
 	 * @param login user
-	 * @return List of tweets
+	 * @return List of twitts
 	 */
 	@ApiMethod(name = "getTimelineOf")
-	public List<Tweet> getTimelineOf(@Named("login") String login) {
+	public List<Twitt> getTimelineOf(@Named("login") String login) {
 		//On recup l'user avec le login
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login);
@@ -274,10 +306,10 @@ public class TinytwittEndpoint {
 		
 		//On recup les keys des twitts de la timeline
 		filter = new Query.FilterPredicate( "receivers" , Query.FilterOperator.EQUAL , id);
-		query = new Query("TweetIndex").
+		query = new Query("TwittIndex").
 				setFilter(filter).setKeysOnly();
 		List<Entity> twittKeysEntity = ds.prepare(query).asList(FetchOptions.Builder.withDefaults());
-		if(twittKeysEntity == null){throw new EntityNotFoundException("No tweet found");}
+		if(twittKeysEntity == null){throw new EntityNotFoundException("No twitt found");}
 		
 		ArrayList<Key> keys = new ArrayList<Key>();
 		for(Entity e : twittKeysEntity){
@@ -288,12 +320,34 @@ public class TinytwittEndpoint {
 		Map<Key, Entity> map = ds.get(keys);
 		List<Entity> list = new ArrayList<Entity>(map.values());
 		
-		List<Tweet> result = new ArrayList<Tweet>();
+		List<Twitt> result = new ArrayList<Twitt>();
 		for(Entity e : list){
-			result.add(new Tweet(e));
+			result.add(new Twitt(e));
 		}
 		
 		return result;
 	}
-
+	
+	@ApiMethod(name = "createNbUsers")
+	public void createNbUsers(@Named("nbUsers") int nbUsers) {
+		
+		String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		
+		String login = "";
+		String email = "";
+		String mdp = "";
+		String prenom = "";
+		String nom = "";
+		for(int i = 1; i <= nbUsers; i++){
+			
+          int j = (int)Math.floor(Math.random() * 62);
+          int k = (int)Math.floor(Math.random() * 62);
+		  login +=  "user" + chars.charAt(j) + chars.charAt(k);
+		  email = "mail" + chars.charAt(j) + chars.charAt(k) + "@mymail.com";
+		  mdp = "password" + chars.charAt(j) + chars.charAt(k);
+		  prenom = "prenom" + chars.charAt(j) + chars.charAt(k);
+		  nom = "nom" + chars.charAt(j) + chars.charAt(k);
+		  createUser(login, email, mdp, prenom, nom);
+		}
+	}
 }

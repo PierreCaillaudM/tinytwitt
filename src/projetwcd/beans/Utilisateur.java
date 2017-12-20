@@ -31,6 +31,7 @@ public class Utilisateur implements Serializable{
 	private List<Long> followers;
 
 	public Utilisateur() {}
+	
 	public Utilisateur(Entity e) {
 		id = (Long) e.getKey().getId();
 		login = (String) e.getProperty("login");
