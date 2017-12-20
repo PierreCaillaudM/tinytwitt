@@ -39,70 +39,27 @@ public class TinytwittEndpoint {
 	@ApiMethod(name = "createUser")
 	public void createUser(@Named("login") String login, @Named("mail") String mail, @Named("mdp") String mdp, @Named("prenom") String prenom, @Named("nom") String nom) {
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-		//UserService userService = UserServiceFactory.getUserService();
+
 		Collection<Filter> filters = new ArrayList<Filter>();
 		filters.add(new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login));
 		filters.add(new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, mail));
 		Filter filter = new Query.CompositeFilter(CompositeFilterOperator.OR, filters);
-		Query query = new Query("User").
-				setAncestor(KeyFactory.createKey("Table", "tableUser")).
-				setFilter(filter);
+		Query query = new Query("User").setFilter(filter);
 		Entity userEntity = ds.prepare(query).asSingleEntity();
 		if (userEntity != null){
 			throw new EntityExistsException("User already exists");
 		}else{
-			userEntity = new Entity("User",KeyFactory.createKey("Table", "tableUser"));;
+			userEntity = new Entity("User");
 			userEntity.setIndexedProperty("login", login);
 			userEntity.setProperty("email", mail);
 			userEntity.setProperty("mdp", mdp);
 			userEntity.setProperty("prenom", prenom);
 			userEntity.setProperty("nom", nom);
-			//userEntity.setProperty("followers", new ArrayList<Long>());
+			
 			ds.put(userEntity);
 			Entity userFollowersEntity = new Entity("UserFollowers",userEntity.getKey());
 			userFollowersEntity.setProperty("followers", new ArrayList<Long>());
-			//ArrayList<Entity> entities = new ArrayList<Entity>();
-			//entities.add(userEntity);
-			//entities.add(userFollowersEntity);
-			ds.put(userFollowersEntity);
-		}
-	}
-	
-	
-	/**
-	 * This method is used for inserting a new user. If user already
-	 * exists, an exception is thrown
-	 *
-	 * @param user user to insert
-	 */
-	@ApiMethod(name = "insertUser")
-	public void insertUser(Utilisateur user) {
-		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-		//UserService userService = UserServiceFactory.getUserService();
-		Collection<Filter> filters = new ArrayList<Filter>();
-		filters.add(new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, user.getLogin()));
-		filters.add(new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, user.getEmail()));
-		Filter filter = new Query.CompositeFilter(CompositeFilterOperator.OR, filters);
-		Query query = new Query("User").
-				setAncestor(KeyFactory.createKey("Table", "tableUser")).
-				setFilter(filter);
-		Entity userEntity = ds.prepare(query).asSingleEntity();
-		if (userEntity != null){
-			throw new EntityExistsException("User already exists");
-		}else{
-			userEntity = new Entity("User",KeyFactory.createKey("Table", "tableUser"));;
-			userEntity.setIndexedProperty("login", user.getLogin());
-			userEntity.setProperty("email", user.getEmail());
-			userEntity.setProperty("mdp", user.getMdp());
-			userEntity.setProperty("prenom", user.getPrenom());
-			userEntity.setProperty("nom", user.getNom());
-			//userEntity.setProperty("followers", new ArrayList<Long>());
-			ds.put(userEntity);
-			Entity userFollowersEntity = new Entity("UserFollowers",userEntity.getKey());
-			userFollowersEntity.setProperty("followers", new ArrayList<Long>());
-			//ArrayList<Entity> entities = new ArrayList<Entity>();
-			//entities.add(userEntity);
-			//entities.add(userFollowersEntity);
+
 			ds.put(userFollowersEntity);
 		}
 	}
@@ -120,7 +77,7 @@ public class TinytwittEndpoint {
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login);
 		Query query = new Query("User").
-				setAncestor(KeyFactory.createKey("Table", "tableUser")).
+				//setAncestor(KeyFactory.createKey("Table", "tableUser")).
 				setFilter(filter);
 		Entity userEntity = ds.prepare(query).asSingleEntity();
 		if (userEntity == null){
@@ -141,9 +98,7 @@ public class TinytwittEndpoint {
 	public void deleteUser(@Named("login") String login) {
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login);
-		Query query = new Query("User").
-				setAncestor(KeyFactory.createKey("Table", "tableUser")).
-				setFilter(filter);
+		Query query = new Query("User").setFilter(filter);
 		Entity userEntity = ds.prepare(query).asSingleEntity();
 		if (userEntity == null){
 			throw new EntityExistsException("User doesn't exists");
@@ -169,9 +124,7 @@ public class TinytwittEndpoint {
 		filters.add(new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, loginFollowed));
 		filters.add(new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, loginFollower));
 		Filter filter = new Query.CompositeFilter(CompositeFilterOperator.OR, filters);
-		Query query = new Query("User").
-				setAncestor(KeyFactory.createKey("Table", "tableUser")).
-				setFilter(filter);
+		Query query = new Query("User").setFilter(filter);
 		List<Entity> entities = ds.prepare(query).asList(FetchOptions.Builder.withDefaults());
 		if(entities == null){throw new EntityNotFoundException("Entities null");}
 		Entity followed = null;
@@ -214,8 +167,7 @@ public class TinytwittEndpoint {
 	public List<Utilisateur> getUserList() {
 		List<Utilisateur> users = new ArrayList<Utilisateur>();
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-		Query query = new Query("User").
-				setAncestor(KeyFactory.createKey("Table", "tableUser"));
+		Query query = new Query("User");
 		List<Entity> userEntities = ds.prepare(query).asList(FetchOptions.Builder.withDefaults());
 		for(Entity entity : userEntities){
 			users.add(new Utilisateur(entity));	
@@ -235,17 +187,10 @@ public class TinytwittEndpoint {
 		List<Utilisateur> users = new ArrayList<Utilisateur>();
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login);
-		Query query = new Query("User").
-				setAncestor(KeyFactory.createKey("Table", "tableUser")).
-				setFilter(filter);
+		Query query = new Query("User").setFilter(filter);
 		Entity userEntity = ds.prepare(query).asSingleEntity();
 		if (userEntity == null){throw new EntityNotFoundException("User not found");}
 		
-		/*
-		List<Entity> userEntities = ds.prepare(query).asList(FetchOptions.Builder.withDefaults());
-		for(Entity entity : userEntities){
-			users.add(new Utilisateur(entity));	
-		}*/
 		return users;
 	}
 
@@ -260,9 +205,7 @@ public class TinytwittEndpoint {
 	public void insertTwitt(@Named("login") String login,@Named("message") String message) {
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login);
-		Query query = new Query("User").
-				setAncestor(KeyFactory.createKey("Table", "tableUser")).
-				setFilter(filter);
+		Query query = new Query("User").setFilter(filter);
 		Entity userEntity = ds.prepare(query).asSingleEntity();
 		if (userEntity == null){throw new EntityNotFoundException("User not found");}
 		
@@ -279,7 +222,7 @@ public class TinytwittEndpoint {
 		@SuppressWarnings("unchecked")
 		ArrayList<Long> followers = (ArrayList<Long>) userFollowersEntity.getProperty("followers");
 		
-		Entity twittIndex = new Entity("TwitttIndex", twitt.getKey());
+		Entity twittIndex = new Entity("TwittIndex", twitt.getKey());
 		twittIndex.setProperty("receivers", followers);
 		ds.put(twittIndex);		
 	}
@@ -296,9 +239,7 @@ public class TinytwittEndpoint {
 		//On recup l'user avec le login
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login);
-		Query query = new Query("User").
-				setAncestor(KeyFactory.createKey("Table", "tableUser")).
-				setFilter(filter);
+		Query query = new Query("User").setFilter(filter);
 		Entity userEntity = ds.prepare(query).asSingleEntity();
 		if (userEntity == null){throw new EntityNotFoundException("User not found");}
 		//On recup son id

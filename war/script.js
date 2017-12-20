@@ -96,7 +96,7 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	// Idée d'astuce de pascal Molli pour s'assurer du chargement d'angular
 	$window.init = function() {
 	      console.log("windowinit called");
-	      var rootApi = 'https://tiny-twitt-project.appspot.com/_ah/api/';
+	      var rootApi = 'https://tiny-twitt.appspot.com/_ah/api/';
 	      gapi.client.load('tinytwittAPI', 'v1', function() {
 	        console.log("twitt api loaded");
 	        $scope.log = 0;
