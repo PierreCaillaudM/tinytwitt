@@ -1,13 +1,13 @@
 {
   "extends" : "thirdParty.api",
   "abstract" : false,
-  "root" : "https://tiny-twitt.appspot.com/_ah/api",
+  "root" : "https://tiny-twitt-project.appspot.com/_ah/api",
   "name" : "tinytwittAPI",
   "version" : "v1",
   "defaultVersion" : false,
   "discovery" : [ "PUBLIC" ],
   "adapter" : {
-    "bns" : "https://tiny-twitt.appspot.com/_ah/spi",
+    "bns" : "https://tiny-twitt-project.appspot.com/_ah/spi",
     "deadline" : 65.0,
     "type" : "lily"
   },
@@ -65,6 +65,22 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
+    "tinytwittAPI.insertUser" : {
+      "path" : "void",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "projetwcd.TinytwittEndpoint.insertUser",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
     "tinytwittAPI.deleteUser" : {
       "path" : "user/{login}",
       "httpMethod" : "DELETE",
@@ -106,22 +122,6 @@
           }
         },
         "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
-    "tinytwittAPI.insertUser" : {
-      "path" : "void",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.insertUser",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
       },
       "response" : {
         "body" : "empty"
@@ -219,14 +219,14 @@
           "key" : {
             "$ref" : "Key"
           },
-          "appId" : {
-            "type" : "string"
+          "propertiesFrom" : {
+            "$ref" : "Entity"
           },
           "kind" : {
             "type" : "string"
           },
-          "propertiesFrom" : {
-            "$ref" : "Entity"
+          "appId" : {
+            "type" : "string"
           },
           "namespace" : {
             "type" : "string"
@@ -360,14 +360,14 @@
           "$ref" : "Entity"
         }
       },
-      "projetwcd.TinytwittEndpoint.deleteUser" : {
-      },
-      "projetwcd.TinytwittEndpoint.addFollower" : {
-      },
       "projetwcd.TinytwittEndpoint.insertUser" : {
         "request" : {
           "$ref" : "Utilisateur"
         }
+      },
+      "projetwcd.TinytwittEndpoint.deleteUser" : {
+      },
+      "projetwcd.TinytwittEndpoint.addFollower" : {
       },
       "projetwcd.TinytwittEndpoint.getUserList" : {
         "response" : {
