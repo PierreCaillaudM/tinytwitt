@@ -12,6 +12,8 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	$scope.usernom ='';
 	$scope.followed ='';
 	$scope.log = false;
+	$scope.start;
+	$scope.stop;
 	
 	// Ajoute l'utilisateur saisie en variable local
 	$scope.connection = function(){
@@ -31,9 +33,12 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	
 	$scope.listeTwitt = function(){
 		if($scope.log == true){
+			$scope.start = new Date().getTime();
 			gapi.client.tinytwittAPI.getTimelineOf({
 				login: $scope.author
 			}).execute(function(resp){
+				$scope.stop = new Date().getTime();
+				console.log($scope.stop - $scope.start);
 				console.log(resp);
 				$scope.listtwitt.push(resp.items);
 				if($scope.listtwitt == null){
@@ -47,10 +52,13 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	
 	$scope.postTwitt = function(){
 		if($scope.log == true ){
+			$scope.start = new Date().getTime();
 			gapi.client.tinytwittAPI.insertTwitt({
 				login: $scope.author,
 				message: $scope.smessage
 			}).execute(function(resp){
+				$scope.stop = new Date().getTime();
+				console.log($scope.stop - $scope.start);
 				console.log(resp);
 				$scope.listtwitt.push({
 					author: $scope.author,
