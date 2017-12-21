@@ -3,10 +3,10 @@
 ## Intro
 Ce projet avait pour objectif la création d'une twitter like application en utilisant le Google App Engine, et ce afin de mieux comprendre le fonctionnement d'une application telle que celle-ci et les enjeux présents pour la scalabilité des ces applications.
 
-Ce projet a été réalisé en collaboration par Pierre Caillaud, Ivan Dromigny--Chevreuil et Marvin 
+Ce projet a été réalisé en collaboration par Pierre CAILLAUD, Ivan DROMIGNY--CHEVREUIL et Marvin JEAN.
 
-L'URL vers le AppEngine :  [Tiny Twitt](http://tiny-twitt.appspot.com/?)
-L'URL vers l'interface REST : [Tiny Twitt REST](http://tiny-twitt.appspot.com/_ah/api/explorer)
+L'URL vers le AppEngine :  [Tiny Twitt](http://tiny-twitt.appspot.com/?).
+L'URL vers l'interface REST : [Tiny Twitt REST](http://tiny-twitt.appspot.com/_ah/api/explorer).
 
 
 ## Backend
@@ -29,4 +29,14 @@ L'idée est, ensuite, d'aller récupérer l'ensemble des parent des TwittIndex d
 ## Frontend
 
 ## Résultat des différentes mesures
+Voici le temps moyens (sur 30 mesures) pour le post d'un twitt pour une personne suivie par 100, 1000 et 2500 followers :
+| 100           |     1000        |   2500     |
+| ------------- |: -------------: | ---------: |
+| val1          |        val2     |      val3  |
 
+Voici le temps moyens (sur 30 mesures) pour la récuperation de la timeline par une personne qui suit 100, 1000 et 2500 et pour les 10, 50 et 100 derniers messages :
+|        |     100            |   1000     |   2500 |
+| -------|: -------------:    | ---------: |        |
+| 10     |        val1        |      value |        |
+| 50     |        val2        |      value |        |
+| 100    |        val3        |      value |        |
