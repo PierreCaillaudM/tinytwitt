@@ -47,7 +47,7 @@ public class TinytwittEndpoint {
 		Query query = new Query("User").setFilter(filter);
 		Entity userEntity = ds.prepare(query).asSingleEntity();
 		if (userEntity != null){
-			throw new EntityExistsException("User already exists");
+			throw new EntityExistsException("User already exists : " + login);
 		}else{
 			userEntity = new Entity("User");
 			userEntity.setIndexedProperty("login", login);
@@ -81,7 +81,7 @@ public class TinytwittEndpoint {
 				setFilter(filter);
 		Entity userEntity = ds.prepare(query).asSingleEntity();
 		if (userEntity == null){
-			throw new EntityNotFoundException("User not found");
+			throw new EntityNotFoundException("User not found : " + login);
 		}
 		Utilisateur user = new Utilisateur(userEntity);
 		return user;
@@ -270,9 +270,11 @@ public class TinytwittEndpoint {
 	}
 	
 	@ApiMethod(name = "createNbUsers")
-	public void createNbUsers(@Named("nbUsers") int nbUsers) {
+	public ArrayList<String> createNbUsers(@Named("nbUsers") int nbUsers) {
 		
 		String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		
+		ArrayList<String> listLogin = new ArrayList<String>();
 		
 		String login = "";
 		String email = "";
@@ -281,14 +283,61 @@ public class TinytwittEndpoint {
 		String nom = "";
 		for(int i = 1; i <= nbUsers; i++){
 			
-          int j = (int)Math.floor(Math.random() * 62);
-          int k = (int)Math.floor(Math.random() * 62);
-		  login =  "user" + chars.charAt(j) + chars.charAt(k);
-		  email = "mail" + chars.charAt(j) + chars.charAt(k) + "@mymail.com";
-		  mdp = "password" + chars.charAt(j) + chars.charAt(k);
-		  prenom = "prenom" + chars.charAt(j) + chars.charAt(k);
-		  nom = "nom" + chars.charAt(j) + chars.charAt(k);
-		  createUser(login, email, mdp, prenom, nom);
+			String rand = "";
+			
+			for(int j = 1; j <= 10; j++){
+				int k = (int)Math.floor(Math.random() * 62);
+				rand += chars.charAt(k);
+			}
+			login =  "user" + rand;
+			email = "mail" + rand + "@mymail.com";
+			mdp = "password" + rand;
+			prenom = "prenom" + rand;
+			nom = "nom" + rand;
+			createUser(login, email, mdp, prenom, nom);
+			listLogin.add(login);
+		}
+		return listLogin;
+	}
+	
+
+	@ApiMethod(name = "createNbFollowers")
+	public void createNbFollowers(@Named("nbFollowers") int nbFollowers, @Named("followed") String followed) {
+		
+		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, followed);
+		Query query = new Query("User").
+				setFilter(filter);
+		Entity userEntity = ds.prepare(query).asSingleEntity();
+		if (userEntity == null){
+			throw new EntityNotFoundException("User not found");
+		}
+		
+		ArrayList<String> listLogin = new ArrayList<String>();
+		listLogin = createNbUsers(nbFollowers);
+		
+		for(int i = 0; i < listLogin.size(); i++){
+			addFollower(followed, listLogin.get(i));
+		}
+	}
+	
+	@ApiMethod(name = "createNbFolloweds")
+	public void createNbFolloweds(@Named("nbFollowed") int nbFolloweds, @Named("follower") String follower) {
+		
+		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, follower);
+		Query query = new Query("User").
+				setFilter(filter);
+		Entity userEntity = ds.prepare(query).asSingleEntity();
+		if (userEntity == null){
+			throw new EntityNotFoundException("User not found");
+		}
+		
+		ArrayList<String> listLogin = new ArrayList<String>();
+		listLogin = createNbUsers(nbFolloweds);
+		
+		for(int i = 0; i < listLogin.size(); i++){
+			addFollower(listLogin.get(i), follower);
 		}
 	}
 }
