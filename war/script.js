@@ -88,7 +88,9 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 				nom: $scope.usernom
 			}).execute(function(resp){
 				console.log(resp);
+				console.log("User created");
 			});
+			
 			$scope.log = 1;
 		}	
 	}
@@ -97,10 +99,14 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	$window.init = function() {
 	      console.log("windowinit called");
 <<<<<<< HEAD
+<<<<<<< HEAD
 	      var rootApi = 'https://tiny-twitt.appspot.com/';
 =======
 	      var rootApi = 'https://tiny-twitt-project.appspot.com/_ah/api/';
 >>>>>>> 4bf66da9d9604ea9e864429447a04ac3c727ebd8
+=======
+	      var rootApi = 'https://tiny-twitt.appspot.com/_ah/api/';
+>>>>>>> 484e7f27ba858ac4872a9efaed28baa47f4df4f1
 	      gapi.client.load('tinytwittAPI', 'v1', function() {
 	        console.log("twitt api loaded");
 	        $scope.log = 0;
