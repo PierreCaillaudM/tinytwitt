@@ -34,7 +34,7 @@
 				<div class="col-md-3" >
 	
 					<!-- Button for connecting to your account -->
-					<form novalidate ng-submit="connection()" style="border: 1px blue solid">
+					<form novalidate ng-submit="connection()" style="border: 1px blue solid" ng-hide="log">
 						<div class="form-group">
 							<label>Utilisateur:</label>
 							<input type="text" placeholder="Utilisateur" class="form-control" ng-model="login">
@@ -43,7 +43,7 @@
 					</form>
 					
 					<!-- Button for creating a new account -->
-					<form novalidate ng-submit="inscription()" style="border: 1px blue solid">
+					<form novalidate ng-submit="inscription()" style="border: 1px blue solid" ng-hide="log">
 						<div class="form-group">
 							<label>Utilisateur: <input type="text" placeholder="Utilisateur" class="form-control" ng-model="userlogin"></label>
 							<label>Mail: <input type="text" placeholder="Mail" class="form-control" ng-model="usermail"></label>
@@ -52,6 +52,11 @@
 							<label>Nom: <input type="text" placeholder="Nom" class="form-control" ng-model="usernom"></label>
 						</div>
 						<button type="submit" class="btn btn-default">Je veux en etre</button>
+					</form>
+					<form ng-submit="deconnexion()" ng-show="log">
+						<div>
+							<button type="submit" class="btn btn-default">Deconnexion</button>
+						</div>
 					</form>
 				</div>
 				

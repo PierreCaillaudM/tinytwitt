@@ -11,25 +11,31 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	$scope.userprenom ='';
 	$scope.usernom ='';
 	$scope.followed ='';
-	$scope.log = 0;
+	$scope.log = false;
 	
 	// Ajoute l'utilisateur saisie en variable local
 	$scope.connection = function(){
 		$scope.author = $scope.login;
 		$scope.listeTwitt();
-		$scope.log = 1;
+		$scope.log = true;
 		console.log($scope.author);
 		console.log(" is connected");
 	}
 	
+	$scope.deconnexion = function(){
+		$scope.author = '';
+		$scope.log = false;
+		$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
+	}
+	
 	
 	$scope.listeTwitt = function(){
-		if($scope.log == 1){
+		if($scope.log == true){
 			gapi.client.tinytwittAPI.getTimelineOf({
 				login: $scope.author
 			}).execute(function(resp){
 				console.log(resp);
-				$scope.listtwitt = resp.items;
+				$scope.listtwitt.push(resp.items);
 				if($scope.listtwitt == null){
 					$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
 				}
@@ -41,7 +47,7 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	
 	
 	$scope.postTwitt = function(){
-		if($scope.log == 1 ){
+		if($scope.log == true ){
 			gapi.client.tinytwittAPI.insertTwitt({
 				login: $scope.author,
 				message: $scope.smessage
@@ -62,7 +68,7 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	// Ajoute un follower a l'utilisateur courant, SI un utilisateur courant est actif, et que le pseudo
 	// a suivre existe
 	$scope.addFollow = function(){
-		if($scope.log == 1){
+		if($scope.log == true){
 			gapi.client.tinytwittAPI.getUser({
 				login: $scope.followed
 			}).execute(function(resp){
@@ -79,7 +85,7 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	
 	// Copie le formulaire dans une variable et l'ajoute au datastore
 	$scope.inscription = function(){
-		if($scope.log == 0){
+		if($scope.log == false){
 			gapi.client.tinytwittAPI.createUser({
 				login: $scope.userlogin,
 				mail: $scope.usermail,
@@ -89,27 +95,21 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 			}).execute(function(resp){
 				console.log(resp);
 				console.log("User created");
+				$scope.author = $scope.userlogin;
+				$scope.log = true;
+				console.log($scope.author);
+				console.log(" is connected");
 			});
-			
-			$scope.log = 1;
 		}	
 	}
 	
 	// Idée d'astuce de pascal Molli pour s'assurer du chargement d'angular
 	$window.init = function() {
 	      console.log("windowinit called");
-<<<<<<< HEAD
-<<<<<<< HEAD
-	      var rootApi = 'https://tiny-twitt.appspot.com/';
-=======
-	      var rootApi = 'https://tiny-twitt-project.appspot.com/_ah/api/';
->>>>>>> 4bf66da9d9604ea9e864429447a04ac3c727ebd8
-=======
 	      var rootApi = 'https://tiny-twitt.appspot.com/_ah/api/';
->>>>>>> 484e7f27ba858ac4872a9efaed28baa47f4df4f1
 	      gapi.client.load('tinytwittAPI', 'v1', function() {
 	        console.log("twitt api loaded");
-	        $scope.log = 0;
+	        $scope.log = false;
 	      }, rootApi);
 	 }
  }                                                             
