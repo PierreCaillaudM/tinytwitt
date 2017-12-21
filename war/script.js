@@ -14,7 +14,10 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	$scope.log = false;
 	$scope.start;
 	$scope.stop;
-	
+	$scope.reponseTwitt = 0;
+	$scope.reponseActualisation = 0;
+	$scope.reponseFollow = 0;
+	 
 	// Ajoute l'utilisateur saisie en variable local
 	$scope.connection = function(){
 		$scope.author = $scope.login;
@@ -38,7 +41,8 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 				login: $scope.author
 			}).execute(function(resp){
 				$scope.stop = new Date().getTime();
-				console.log($scope.stop - $scope.start);
+				$scope.reponseActualisation = $scope.stop - $scope.start;
+				//console.log($scope.reponseActualisation);
 				console.log(resp);
 				$scope.listtwitt.push(resp.items);
 				if($scope.listtwitt == null){
@@ -58,7 +62,8 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 				message: $scope.smessage
 			}).execute(function(resp){
 				$scope.stop = new Date().getTime();
-				console.log($scope.stop - $scope.start);
+				$scope.reponseTwitt = $scope.stop - $scope.start;
+				//console.log($scope.reponseTwitt);
 				console.log(resp);
 				$scope.listtwitt.push({
 					author: $scope.author,
@@ -73,6 +78,7 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	// a suivre existe
 	$scope.addFollow = function(){
 		if($scope.log == true){
+			$scope.start = new Date().getTime();
 			gapi.client.tinytwittAPI.getUser({
 				login: $scope.followed
 			}).execute(function(resp){
@@ -83,6 +89,8 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 						loginFollowed: $scope.followed,
 						loginFollower: $scope.author
 					}).execute(function(resp){
+						$scope.stop = new Date().getTime();
+						$scope.reponseFollow = $scope.stop - $scope.start;
 						console.log(resp);
 						$scope.$apply();
 					});
