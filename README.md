@@ -29,7 +29,7 @@ L'idée est, ensuite, d'aller récupérer l'ensemble des parent des TwittIndex d
 ## Frontend
 
 ## Résultat des différentes mesures
-Voici le temps moyens (sur 30 mesures) pour le post d'un twitt pour une personne suivie par 100, 1000 et 2500 followers :
+Voici le temps moyens (sur 30 mesures) pour le post d'un twitt pour une personne suivie par 100, 1000 et 2500 followers.
 | 100 | 1000 | 2500 |
 | --- | ---  | ---  |
 | val1 | val2 | val3 |
