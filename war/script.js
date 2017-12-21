@@ -40,7 +40,6 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 					$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
 				}
 				$scope.$apply();
-				console.log("List updated");
 			});
 		}
 	}
@@ -51,17 +50,14 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 			gapi.client.tinytwittAPI.insertTwitt({
 				login: $scope.author,
 				message: $scope.smessage
-			}).execute(
-				function(resp){
-					console.log(resp);
-					$scope.listtwitt.push({
-						author: $scope.author,
-						message: $scope.smessage
-					});
-					$scope.$apply();
-					console.log("Twitt posted");
-				}		
-			)
+			}).execute(function(resp){
+				console.log(resp);
+				$scope.listtwitt.push({
+					author: $scope.author,
+					message: $scope.smessage
+				});
+				$scope.$apply();
+			});
 		}
 	}
 	
@@ -73,11 +69,16 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 				login: $scope.followed
 			}).execute(function(resp){
 				if(resp.login == $scope.followed){
+					console.log($scope.followed);
+					console.log($scope.author);
 					gapi.client.tinytwittAPI.addFollower({
 						loginFollowed: $scope.followed,
 						loginFollower: $scope.author
+					}).execute(function(resp){
+						console.log(resp);
+						$scope.$apply();
 					});
-					console.log("Follow succeded");
+					
 				}
 			});
 		}
