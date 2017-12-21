@@ -35,10 +35,10 @@ Voici le temps moyens (sur 30 mesures) pour le post d'un twitt pour une personne
  --- | ---  | ---  
  val1 | val2 | val3 
 
-Voici le temps moyens (sur 30 mesures) pour la récuperation de la timeline par une personne qui suit 100, 1000 et 2500 et pour les 10, 50 et 100 derniers messages :
+Voici le temps moyens (sur 30 mesures) pour la récuperation de la timeline par une personne qui suit 100, 1000 et 2500 et pour les 10, 50 et 100 derniers messages.
 
-|        |     100            |   1000     |   2500 |
-| -------| : -------------:   | ---------: |        |
-| 10     |        val1        |      value |        |
-| 50     |        val2        |      value |        |
-| 100    |        val3        |      value |        |
+        |     100         |   1000    |   2500 
+ ------ | -------------   | --------- |  ----- 
+ 10     |     val1        |     value |        
+ 50     |     val2        |     value |        
+ 100    |     val3        |     value |        
