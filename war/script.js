@@ -44,8 +44,10 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	}
 	
 	// Recupere nb fois les tweet des follows
-	$scope.listeTwitt = function(nb, nbTwitt){
+	$scope.listeTwitt = function(nb){
 		if($scope.log == true){
+			
+			$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
 			
 			for(var i=0;i<nb;i++){
 				$scope.start = new Date().getTime();
@@ -55,19 +57,18 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 					login: $scope.author
 				}).execute(function(resp){
 					
-					console.log(resp);
-					for(int j=0; j < nbTwitt; j++){
-						if(resp.items[j] != null){
-							$scope.listtwitt.push(resp.items[j]);
-						}
-					}
 					if($scope.listtwitt == null){
 						$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
+					}else{
+						console.log(resp.items.length);
+						for(var i = 0; i < resp.items.length; i++){
+							$scope.listtwitt.push({author: resp.items[i].author, message: resp.items[i].message});
+						}
 					}
 					$scope.$apply();
 					$scope.stop = new Date().getTime();
 					$scope.tempo = $scope.stop - $scope.start;
-					$scope.reponseActualisation = ($scope.reponseActualisation + $scope.tempo);
+					$scope.reponseActualisation = $scope.reponseActualisation + $scope.tempo/nb;
 				});
 			}
 			
@@ -98,7 +99,7 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 					$scope.$apply();
 					$scope.stop = new Date().getTime();
 					$scope.tempo = $scope.stop - $scope.start;
-					$scope.reponseTwitt = ($scope.reponseTwitt + $scope.tempo);
+					$scope.reponseTwitt = $scope.reponseTwitt + $scope.tempo/nb;
 				});
 			}
 			console.log($scope.reponseTwitt);
@@ -159,7 +160,7 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	// Idée d'astuce de pascal Molli pour s'assurer du chargement d'angular
 	$window.init = function() {
 	      console.log("windowinit called");
-	      var rootApi = 'https://tiny-twitt.appspot.com/_ah/api/';
+	      var rootApi = 'https://tiny-twitt-project.appspot.com/_ah/api/';
 	      gapi.client.load('tinytwittAPI', 'v1', function() {
 	        console.log("twitt api loaded");
 	        $scope.log = false;

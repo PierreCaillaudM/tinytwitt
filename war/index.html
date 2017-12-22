@@ -53,7 +53,7 @@
 								<label>Utilisateur:</label> <input type="text"
 									placeholder="Pseudo" class="form-control" ng-model="login">
 							</div>
-							<h3 style="display: inline-block" ng-show="erreurLog"><font color="red">Là =></font></h3>
+							
 							<button type="submit" class="btn btn-default">C'est moi</button>
 						</form>
 						<!-- Button for deconnecting to your account -->
@@ -105,7 +105,7 @@
 
 						<!-- Button for refreshing the timeline -->
 						<div class="col-md-12">
-							<form ng-submit="listeTwitt(30, 10)">
+							<form ng-submit="listeTwitt(30)">
 								<button type="submit" class="btn btn-primary">nouveau twitt ? * 30</button>
 							</form>
 						</div>
@@ -122,7 +122,7 @@
 
 						<!-- Button for refreshing the timeline -->
 						<div class="col-md-12">
-							<form ng-submit="listeTwitt(1, 50)">
+							<form ng-submit="listeTwitt(1)">
 								<button type="submit" class="btn btn-primary">nouveau
 									twitt ?</button>
 							</form>
