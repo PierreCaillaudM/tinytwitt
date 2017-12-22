@@ -56,21 +56,19 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 					login: $scope.author
 				}).execute(function(resp){
 					
-					if($scope.listtwitt == null){
-						$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
-					}else{
-						$scope.tmplist = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
-						if(resp.items.length <= nbMessages){
-							for(var i = 0; i < resp.items.length; i++){
-								$scope.tmplist.push({author: resp.items[i].author, message: resp.items[i].message});
-							}
-						}else{
-							for(var i = 0; i < nbMessages; i++){
-								$scope.tmplist.push({author: resp.items[i].author, message: resp.items[i].message});
-							}
+					console.log(resp);
+					$scope.tmplist = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
+					if(resp.items.length <= nbMessages){
+						for(var i = 0; i < resp.items.length; i++){
+							$scope.tmplist.push({author: resp.items[i].author, message: resp.items[i].message, date : resp.items[i].date});
 						}
-						$scope.listtwitt = $scope.tmplist;
+					}else{
+						for(var i = 0; i < nbMessages; i++){
+							$scope.tmplist.push({author: resp.items[i].author, message: resp.items[i].message, date : resp.items[i].date});
+						}
 					}
+					$scope.listtwitt = $scope.tmplist;
+
 					$scope.$apply();
 					$scope.stop = new Date().getTime();
 					$scope.tempo = $scope.stop - $scope.start;
@@ -164,7 +162,7 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	// Idée d'astuce de pascal Molli pour s'assurer du chargement d'angular
 	$window.init = function() {
 	      console.log("windowinit called");
-	      var rootApi = 'https://tiny-twitt-project.appspot.com/_ah/api/';
+	      var rootApi = 'https://tiny-twitt.appspot.com/_ah/api/';
 	      gapi.client.load('tinytwittAPI', 'v1', function() {
 	        console.log("twitt api loaded");
 	        $scope.log = false;

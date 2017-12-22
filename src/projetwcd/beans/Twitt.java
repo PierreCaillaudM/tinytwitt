@@ -12,7 +12,7 @@ import javax.jdo.annotations.PrimaryKey;
 import com.google.appengine.api.datastore.Entity;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION)
-public class Twitt implements Serializable{
+public class Twitt implements Serializable, Comparable<Twitt>{
 	@PrimaryKey
 	@Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
 	Long id;
@@ -73,7 +73,9 @@ public class Twitt implements Serializable{
 		this.likes = likes;
 	}
 	
-	
-	
+	  @Override
+	  public int compareTo(Twitt o) {
+	    return getDate().compareTo(o.getDate());
+	  }
 
 }
