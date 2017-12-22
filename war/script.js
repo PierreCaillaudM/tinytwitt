@@ -24,9 +24,8 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	 
 	// Ajoute l'utilisateur saisie en variable local
 	$scope.connection = function(nom){
-			$scope.login = nom;
+		$scope.login = nom;
 		$scope.author = $scope.login;
-		//$scope.items[0] = $scope.login;
 		$scope.listeTwitt();
 		$scope.log = true;
 		$scope.erreurLog=false;
@@ -34,17 +33,17 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 		console.log(" is connected");
 	}
 	
+	// Permet la deconnexion d'un user
 	$scope.deconnexion = function(){
 		$scope.author = '';
 		$scope.log = false;
 		$scope.selection = $scope.items[0];
 		$scope.login = '';
-		//$scope.items[0] = 'pseudo';
 		$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
 	}
 	
 	// Recupere nb fois les tweet des follows
-	$scope.listeTwitt = function(nb){
+	$scope.listeTwitt = function(nb, nbMessages){
 		if($scope.log == true){
 			
 			$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
@@ -60,10 +59,17 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 					if($scope.listtwitt == null){
 						$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
 					}else{
-						console.log(resp.items.length);
-						for(var i = 0; i < resp.items.length; i++){
-							$scope.listtwitt.push({author: resp.items[i].author, message: resp.items[i].message});
+						$scope.tmplist = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
+						if(resp.items.length <= nbMessages){
+							for(var i = 0; i < resp.items.length; i++){
+								$scope.tmplist.push({author: resp.items[i].author, message: resp.items[i].message});
+							}
+						}else{
+							for(var i = 0; i < nbMessages; i++){
+								$scope.tmplist.push({author: resp.items[i].author, message: resp.items[i].message});
+							}
 						}
+						$scope.listtwitt = $scope.tmplist;
 					}
 					$scope.$apply();
 					$scope.stop = new Date().getTime();
@@ -71,8 +77,6 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 					$scope.reponseActualisation = $scope.reponseActualisation + $scope.tempo/nb;
 				});
 			}
-			
-			//console.log($scope.reponseActualisation);	
 		}else{
 			$scope.erreurLog=true;
 		}

@@ -89,6 +89,28 @@ public class TinytwittEndpoint {
 		return user;
 	}
 	
+	/**
+	 * This method is used for getting an existing user. If the user does not
+	 * exist in the datastore, an exception is thrown.
+	 *
+	 * @param login login of the user
+	 * @return The user. null if not found
+	 */
+	@ApiMethod(name = "getUserNbFollowers")
+	public int getUserNbFollowers(@Named("login") String login) {
+		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login);
+		Query query = new Query("User").
+				//setAncestor(KeyFactory.createKey("Table", "tableUser")).
+				setFilter(filter);
+		Entity userEntity = ds.prepare(query).asSingleEntity();
+		if (userEntity == null){
+			throw new EntityNotFoundException("User not found : " + login);
+		}
+		Utilisateur user = new Utilisateur(userEntity);
+		return user.getFollowers().size();
+	}
+	
 	
 	/**
 	 * This method is used for deleting an existing user. If the user does not
@@ -319,6 +341,16 @@ public class TinytwittEndpoint {
 			prenom = "prenom" + rand;
 			nom = "nom" + rand;
 			createUser(login, email, mdp, prenom, nom);
+			
+			ArrayList<String> listTwitt = new ArrayList<String>();
+			listTwitt.add("Aujourd'hui j'ai mange des chips goût camembert ! C'etait delicieux *-*");
+			listTwitt.add("Grrrr, mon ornithorynque de compagnie a encore manger un de mes CD de console =(");
+			listTwitt.add("Je me suis fais battre au bras de fer par une gamine de 4 ans...");
+			listTwitt.add("Ma mere m'a puni, elle m'a interdit l'acces au deuxième et troisieme etage de la maison. Heureusement qu'il reste la piscine !");
+			listTwitt.add("Tonald Drump est vraiment bizarre...");
+			int k = (int)Math.floor(Math.random() * 5);
+			insertTwitt(login,listTwitt.get(k));
+			
 			listLogin.add(login);
 		}
 		return listLogin;
@@ -372,28 +404,6 @@ public class TinytwittEndpoint {
 		
 		for(int i = 0; i < listLogin.size(); i++){
 			addFollower(listLogin.get(i), follower);
-		}
-	}
-	
-	/**
-	 * This method is used for creating one twitt for every users in the datastore
-	 *
-	 */
-	@ApiMethod(name = "makeThemTwitt")
-	public void makeThemTwitt() {
-		List<Utilisateur> listUsers = new ArrayList<Utilisateur>();
-		listUsers = getUserList();
-		
-		ArrayList<String> listTwitt = new ArrayList<String>();
-		listTwitt.add("Aujourd'hui j'ai mangé des chips goût camembert ! C'était délicieux *-*");
-		listTwitt.add("Grrrr, mon ornithorynque de compagnie a encore manger un de mes CD de console è_é");
-		listTwitt.add("Je me suis fais battre au bras de fer par une gamine de 4 ans...");
-		listTwitt.add("Ma mère m'a puni, elle m'a interdit l'accès au deuxième et troisième étage de la maison. Heureusement qu'il reste la pscine !");
-		listTwitt.add("Tonald Drump est vraiment bizarre...");
-		
-		for(Utilisateur u : listUsers){
-			int i = (int)Math.floor(Math.random() * 5);
-			insertTwitt(u.getLogin(),listTwitt.get(i));
 		}
 	}
 }

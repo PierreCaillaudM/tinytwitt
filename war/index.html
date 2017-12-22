@@ -105,11 +105,17 @@
 
 						<!-- Button for refreshing the timeline -->
 						<div class="col-md-12">
-							<form ng-submit="listeTwitt(30)">
-								<button type="submit" class="btn btn-primary">nouveau twitt ? * 30</button>
+							<form>
+								<label>Afficher les nouveaux twitts * 30</label>
+								<button type="submit" class="btn btn-primary" ng-click="listeTwitt(30,10)">10</button>
+								<button type="submit" class="btn btn-primary" ng-click="listeTwitt(30,50)">50</button>
+								<button type="submit" class="btn btn-primary" ng-click="listeTwitt(30,100)">100</button>
+								<label> derniers</label>
 							</form>
 						</div>
 					</div>
+					
+					<!-- Button for making a tweet -->
 					<div ng-show="selection == 'pseudo'">
 						<div class="col-md-12">
 							<form class="form-inline" ng-submit="postTwitt(1)">
@@ -122,9 +128,12 @@
 
 						<!-- Button for refreshing the timeline -->
 						<div class="col-md-12">
-							<form ng-submit="listeTwitt(1)">
-								<button type="submit" class="btn btn-primary">nouveau
-									twitt ?</button>
+							<form>
+								<label>Afficher les nouveaux twitts </label>
+								<button type="submit" class="btn btn-primary" ng-click="listeTwitt(1,10)">10</button>
+								<button type="submit" class="btn btn-primary" ng-click="listeTwitt(1,50)">50</button>
+								<button type="submit" class="btn btn-primary" ng-click="listeTwitt(1,100)">100</button>
+								<label> derniers</label>
 							</form>
 						</div>
 					</div>

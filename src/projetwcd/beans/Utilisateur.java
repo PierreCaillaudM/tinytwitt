@@ -74,7 +74,7 @@ public class Utilisateur implements Serializable{
 	public String getNom() {
 		return nom;
 	}
-	public void settNom(String nom) {
+	public void setNom(String nom) {
 		this.nom = nom;
 	}
 
