@@ -2,9 +2,11 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
  function($scope, $window){
 	
 	$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
+	$scope.items = ['pseudo','UserForTest100','UserForTest1000','UserForTest2500'];
 	$scope.author;
 	$scope.smessage;
-	$scope.login ='';
+	$scope.login='';
+	$scope.selection = $scope.items[0];
 	$scope.userlogin ='';
 	$scope.usermail ='';
 	$scope.usermdp ='';
@@ -17,12 +19,17 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	$scope.reponseTwitt = 0;
 	$scope.reponseActualisation = 0;
 	$scope.reponseFollow = 0;
+	$scope.erreurLog=false;
+	$scope.tempo=0;
 	 
 	// Ajoute l'utilisateur saisie en variable local
-	$scope.connection = function(){
+	$scope.connection = function(nom){
+			$scope.login = nom;
 		$scope.author = $scope.login;
+		//$scope.items[0] = $scope.login;
 		$scope.listeTwitt();
 		$scope.log = true;
+		$scope.erreurLog=false;
 		console.log($scope.author);
 		console.log(" is connected");
 	}
@@ -30,47 +37,69 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	$scope.deconnexion = function(){
 		$scope.author = '';
 		$scope.log = false;
+		$scope.selection = $scope.items[0];
+		$scope.login = '';
+		//$scope.items[0] = 'pseudo';
 		$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
 	}
 	
-	
-	$scope.listeTwitt = function(){
+	// Recupere nb fois les tweet des follows
+	$scope.listeTwitt = function(nb){
 		if($scope.log == true){
+			
+			for(var i=0;i<nb;i++){
 			$scope.start = new Date().getTime();
+			$scope.reponseActualisation = 0;
+			$scope.tempo=0;
 			gapi.client.tinytwittAPI.getTimelineOf({
 				login: $scope.author
 			}).execute(function(resp){
-				$scope.stop = new Date().getTime();
-				$scope.reponseActualisation = $scope.stop - $scope.start;
-				//console.log($scope.reponseActualisation);
+				
 				console.log(resp);
 				$scope.listtwitt.push(resp.items);
 				if($scope.listtwitt == null){
 					$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
 				}
 				$scope.$apply();
+				$scope.stop = new Date().getTime();
+				$scope.tempo = $scope.stop - $scope.start;
+				$scope.reponseActualisation = $scope.reponseActualisation + $scope.tempo;
 			});
+			}
+			
+			//console.log($scope.reponseActualisation);
+		}else{
+			$scope.erreurLog=true;
 		}
 	}
 	
-	
-	$scope.postTwitt = function(){
+	// Post nb fois le twitt
+	$scope.postTwitt = function(nb){
 		if($scope.log == true ){
 			$scope.start = new Date().getTime();
-			gapi.client.tinytwittAPI.insertTwitt({
-				login: $scope.author,
-				message: $scope.smessage
-			}).execute(function(resp){
-				$scope.stop = new Date().getTime();
-				$scope.reponseTwitt = $scope.stop - $scope.start;
-				//console.log($scope.reponseTwitt);
-				console.log(resp);
-				$scope.listtwitt.push({
-					author: $scope.author,
+			$scope.reponseTwitt = 0;
+			$scope.tempo=0;
+			for(var i=0;i<nb;i++){
+				gapi.client.tinytwittAPI.insertTwitt({
+					login: $scope.author,
 					message: $scope.smessage
+				}).execute(function(resp){
+					
+					console.log(resp);
+					$scope.listtwitt.push({
+						author: $scope.author,
+						message: $scope.smessage
+					});
+					$scope.$apply();
+					$scope.stop = new Date().getTime();
+					$scope.tempo = $scope.stop - $scope.start;
+					$scope.reponseTwitt = $scope.reponseTwitt + $scope.tempo;
 				});
-				$scope.$apply();
-			});
+			}
+			console.log($scope.reponseTwitt);
+			
+		}else{
+			$scope.erreurLog=true;
 		}
 	}
 	
@@ -90,12 +119,15 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 						loginFollower: $scope.author
 					}).execute(function(resp){
 						$scope.stop = new Date().getTime();
-						$scope.reponseFollow = $scope.stop - $scope.start;
+						$scope.tempo = $scope.stop - $scope.start;
+						$scope.reponseFollow = $scope.reponseFollow + $scope.tempo;
 						console.log(resp);
 						$scope.$apply();
 					});
 				}
 			});
+		}else{
+			$scope.erreurLog=true;
 		}
 	}
 	
