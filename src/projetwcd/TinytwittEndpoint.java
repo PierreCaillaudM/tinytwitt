@@ -61,6 +61,8 @@ public class TinytwittEndpoint {
 			userFollowersEntity.setProperty("followers", new ArrayList<Long>());
 
 			ds.put(userFollowersEntity);
+			
+			addFollower(login,login);
 		}
 	}
 
