@@ -48,26 +48,26 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 		if($scope.log == true){
 			
 			for(var i=0;i<nb;i++){
-			$scope.start = new Date().getTime();
-			$scope.reponseActualisation = 0;
-			$scope.tempo=0;
-			gapi.client.tinytwittAPI.getTimelineOf({
-				login: $scope.author
-			}).execute(function(resp){
-				
-				console.log(resp);
-				$scope.listtwitt.push(resp.items);
-				if($scope.listtwitt == null){
-					$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
-				}
-				$scope.$apply();
-				$scope.stop = new Date().getTime();
-				$scope.tempo = $scope.stop - $scope.start;
-				$scope.reponseActualisation = $scope.reponseActualisation + $scope.tempo;
-			});
+				$scope.start = new Date().getTime();
+				$scope.reponseActualisation = 0;
+				$scope.tempo=0;
+				gapi.client.tinytwittAPI.getTimelineOf({
+					login: $scope.author
+				}).execute(function(resp){
+					
+					console.log(resp);
+					$scope.listtwitt.push(resp.items);
+					if($scope.listtwitt == null){
+						$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
+					}
+					$scope.$apply();
+					$scope.stop = new Date().getTime();
+					$scope.tempo = $scope.stop - $scope.start;
+					$scope.reponseActualisation = ($scope.reponseActualisation + $scope.tempo)/nb;
+				});
 			}
 			
-			//console.log($scope.reponseActualisation);
+			//console.log($scope.reponseActualisation);	
 		}else{
 			$scope.erreurLog=true;
 		}
@@ -93,7 +93,7 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 					$scope.$apply();
 					$scope.stop = new Date().getTime();
 					$scope.tempo = $scope.stop - $scope.start;
-					$scope.reponseTwitt = $scope.reponseTwitt + $scope.tempo;
+					$scope.reponseTwitt = ($scope.reponseTwitt + $scope.tempo)/nb;
 				});
 			}
 			console.log($scope.reponseTwitt);

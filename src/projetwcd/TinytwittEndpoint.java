@@ -62,7 +62,7 @@ public class TinytwittEndpoint {
 
 			ds.put(userFollowersEntity);
 			
-			addFollower(login,login);
+			addSameFollower(login);
 		}
 	}
 
@@ -158,6 +158,39 @@ public class TinytwittEndpoint {
 		}
 	}
 	
+	/**
+	 * This method is used for adding a follower to the user. If the user does not
+	 * exist in the datastore, an exception is thrown.
+	 *
+	 * @param Utilisateur user to follow
+	 * @param login follower
+	 * 
+	 */
+	@ApiMethod(name = "addSameFollower")
+	public void addSameFollower(@Named("loginFollowed") String loginFollowedFollower) {
+		//On récupère le follower et le followed
+		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, loginFollowedFollower);
+		Query query = new Query("User").setFilter(filter);
+		Entity entity = ds.prepare(query).asSingleEntity();
+		if(entity == null){throw new EntityNotFoundException("Entity null");}
+		Entity followed = entity;
+		Entity follower = entity;
+
+		query = new Query("UserFollowers").setAncestor(followed.getKey());
+		Entity userFollowers = ds.prepare(query).asSingleEntity();
+		@SuppressWarnings("unchecked")
+		ArrayList<Long> followers = (ArrayList<Long>) userFollowers.getProperty("followers");
+		if(followers == null){followers = new ArrayList<Long>();}
+		if(followers.contains((Long) follower.getKey().getId())){
+			throw new EntityExistsException("Already following this user");
+		}else{
+			followers.add((Long) follower.getKey().getId());
+			userFollowers.setProperty("followers", followers);
+			ds.put(userFollowers);
+		}
+	}
+	
 	
 	/**
 	 * This method is used for getting all existing users. If no entity
@@ -177,24 +210,6 @@ public class TinytwittEndpoint {
 		return users;
 	}
 	
-	
-	/**
-	 * This method is used for getting all follower for a user. If no entity
-	 * exists in the datastore, it return null
-	 *
-	 * @return A list of user. null if not found
-	 */
-	@ApiMethod(name = "getUserFollowerList")
-	public List<Utilisateur> getUserFollowerList(@Named("login") String login) {
-		List<Utilisateur> users = new ArrayList<Utilisateur>();
-		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-		Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login);
-		Query query = new Query("User").setFilter(filter);
-		Entity userEntity = ds.prepare(query).asSingleEntity();
-		if (userEntity == null){throw new EntityNotFoundException("User not found");}
-		
-		return users;
-	}
 
 	
 	/**
@@ -271,6 +286,13 @@ public class TinytwittEndpoint {
 		return result;
 	}
 	
+	
+	/**
+	 * This method is used creating nb users in the datastore
+	 *
+	 * @param nb user to create
+	 * @return List of users login
+	 */
 	@ApiMethod(name = "createNbUsers")
 	public ArrayList<String> createNbUsers(@Named("nbUsers") int nbUsers) {
 		
@@ -303,6 +325,11 @@ public class TinytwittEndpoint {
 	}
 	
 
+	/**
+	 * This method is used for creating nb followers to a user
+	 *
+	 * @param nb followers to add, login user
+	 */
 	@ApiMethod(name = "createNbFollowers")
 	public void createNbFollowers(@Named("nbFollowers") int nbFollowers, @Named("followed") String followed) {
 		
@@ -323,6 +350,11 @@ public class TinytwittEndpoint {
 		}
 	}
 	
+	/**
+	 * This method is used for making one user follow nb other users
+	 *
+	 * @param nb users to follow, login user
+	 */
 	@ApiMethod(name = "createNbFolloweds")
 	public void createNbFolloweds(@Named("nbFollowed") int nbFolloweds, @Named("follower") String follower) {
 		
@@ -340,6 +372,28 @@ public class TinytwittEndpoint {
 		
 		for(int i = 0; i < listLogin.size(); i++){
 			addFollower(listLogin.get(i), follower);
+		}
+	}
+	
+	/**
+	 * This method is used for creating one twitt for every users in the datastore
+	 *
+	 */
+	@ApiMethod(name = "makeThemTwitt")
+	public void makeThemTwitt() {
+		List<Utilisateur> listUsers = new ArrayList<Utilisateur>();
+		listUsers = getUserList();
+		
+		ArrayList<String> listTwitt = new ArrayList<String>();
+		listTwitt.add("Aujourd'hui j'ai mangé des chips goût camembert ! C'était délicieux *-*");
+		listTwitt.add("Grrrr, mon ornithorynque de compagnie a encore manger un de mes CD de console è_é");
+		listTwitt.add("Je me suis fais battre au bras de fer par une gamine de 4 ans...");
+		listTwitt.add("Ma mère m'a puni, elle m'a interdit l'accès au deuxième et troisième étage de la maison. Heureusement qu'il reste la pscine !");
+		listTwitt.add("Tonald Drump est vraiment bizarre...");
+		
+		for(Utilisateur u : listUsers){
+			int i = (int)Math.floor(Math.random() * 5);
+			insertTwitt(u.getLogin(),listTwitt.get(i));
 		}
 	}
 }
