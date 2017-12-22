@@ -28,7 +28,56 @@
   "ownerName" : "mycompany.com",
   "packagePath" : "services",
   "methods" : {
-<<<<<<< HEAD
+    "tinytwittAPI.createNbFollowers" : {
+      "path" : "createNbFollowers/{nbFollowers}/{followed}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "projetwcd.TinytwittEndpoint.createNbFollowers",
+      "request" : {
+        "parameters" : {
+          "nbFollowers" : {
+            "type" : "int32",
+            "required" : true
+          },
+          "followed" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "tinytwittAPI.createNbFolloweds" : {
+      "path" : "createNbFolloweds/{nbFollowed}/{follower}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "projetwcd.TinytwittEndpoint.createNbFolloweds",
+      "request" : {
+        "parameters" : {
+          "nbFollowed" : {
+            "type" : "int32",
+            "required" : true
+          },
+          "follower" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
     "tinytwittAPI.getUser" : {
       "path" : "utilisateur/{login}",
       "httpMethod" : "GET",
@@ -50,19 +99,14 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "tinytwittAPI.createUser" : {
-      "path" : "createUser/{login}/{mail}/{mdp}/{prenom}/{nom}",
-      "httpMethod" : "POST",
-=======
-    "tinytwittAPI.deleteUser" : {
-      "path" : "user/{login}",
-      "httpMethod" : "DELETE",
->>>>>>> origin/master
+    "tinytwittAPI.getTimelineOf" : {
+      "path" : "twittcollection/{login}",
+      "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.deleteUser",
+      "rosyMethod" : "projetwcd.TinytwittEndpoint.getTimelineOf",
       "request" : {
         "parameters" : {
           "login" : {
@@ -73,39 +117,30 @@
         "body" : "empty"
       },
       "response" : {
-        "body" : "empty"
+        "body" : "autoTemplate(backendResponse)"
       }
     },
-    "tinytwittAPI.addFollower" : {
-      "path" : "addFollower/{loginFollowed}/{loginFollower}",
+    "tinytwittAPI.createNbUsers" : {
+      "path" : "createNbUsers/{nbUsers}",
       "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.addFollower",
+      "rosyMethod" : "projetwcd.TinytwittEndpoint.createNbUsers",
       "request" : {
         "parameters" : {
-          "loginFollowed" : {
-            "type" : "string",
-            "required" : true
-          },
-          "loginFollower" : {
-            "type" : "string",
+          "nbUsers" : {
+            "type" : "int32",
             "required" : true
           }
         },
         "body" : "empty"
       },
       "response" : {
-        "body" : "empty"
+        "body" : "autoTemplate(backendResponse)"
       }
     },
-<<<<<<< HEAD
-    "tinytwittAPI.deleteUser" : {
-      "path" : "user/{login}",
-      "httpMethod" : "DELETE",
-=======
     "tinytwittAPI.makeThemTwitt" : {
       "path" : "makeThemTwitt",
       "httpMethod" : "POST",
@@ -121,62 +156,87 @@
         "body" : "empty"
       }
     },
-    "tinytwittAPI.createNbUsers" : {
-      "path" : "createNbUsers/{nbUsers}",
-      "httpMethod" : "POST",
->>>>>>> origin/master
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-<<<<<<< HEAD
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.deleteUser",
-      "request" : {
-        "parameters" : {
-          "login" : {
-            "type" : "string",
-=======
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.createNbUsers",
-      "request" : {
-        "parameters" : {
-          "nbUsers" : {
-            "type" : "int32",
->>>>>>> origin/master
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-<<<<<<< HEAD
     "tinytwittAPI.addFollower" : {
       "path" : "addFollower/{loginFollowed}/{loginFollower}",
-=======
-    "tinytwittAPI.createUser" : {
-      "path" : "createUser/{login}/{mail}/{mdp}/{prenom}/{nom}",
->>>>>>> origin/master
       "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-<<<<<<< HEAD
       "rosyMethod" : "projetwcd.TinytwittEndpoint.addFollower",
-=======
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.createUser",
->>>>>>> origin/master
       "request" : {
         "parameters" : {
           "loginFollowed" : {
             "type" : "string",
             "required" : true
           },
-<<<<<<< HEAD
           "loginFollower" : {
-=======
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "tinytwittAPI.addSameFollower" : {
+      "path" : "addSameFollower/{loginFollowed}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "projetwcd.TinytwittEndpoint.addSameFollower",
+      "request" : {
+        "parameters" : {
+          "loginFollowed" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "tinytwittAPI.deleteUser" : {
+      "path" : "user/{login}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "projetwcd.TinytwittEndpoint.deleteUser",
+      "request" : {
+        "parameters" : {
+          "login" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "tinytwittAPI.createUser" : {
+      "path" : "createUser/{login}/{mail}/{mdp}/{prenom}/{nom}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "projetwcd.TinytwittEndpoint.createUser",
+      "request" : {
+        "parameters" : {
+          "login" : {
+            "type" : "string",
+            "required" : true
+          },
           "mail" : {
             "type" : "string",
             "required" : true
@@ -200,57 +260,6 @@
         "body" : "empty"
       }
     },
-    "tinytwittAPI.createNbFollowers" : {
-      "path" : "createNbFollowers/{nbFollowers}/{followed}",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.createNbFollowers",
-      "request" : {
-        "parameters" : {
-          "nbFollowers" : {
-            "type" : "int32",
-            "required" : true
-          },
-          "followed" : {
->>>>>>> origin/master
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
-    "tinytwittAPI.createNbFolloweds" : {
-      "path" : "createNbFolloweds/{nbFollowed}/{follower}",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.createNbFolloweds",
-      "request" : {
-        "parameters" : {
-          "nbFollowed" : {
-            "type" : "int32",
-            "required" : true
-          },
-          "follower" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
     "tinytwittAPI.getUserList" : {
       "path" : "utilisateurcollection",
       "httpMethod" : "GET",
@@ -266,28 +275,6 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-<<<<<<< HEAD
-    "tinytwittAPI.getUserList" : {
-      "path" : "utilisateurcollection",
-      "httpMethod" : "GET",
-=======
-    "tinytwittAPI.insertTwitt" : {
-      "path" : "void/{login}/{message}",
-      "httpMethod" : "POST",
->>>>>>> origin/master
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-<<<<<<< HEAD
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.getUserList",
-      "request" : {
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "tinytwittAPI.insertTwitt" : {
       "path" : "void/{login}/{message}",
       "httpMethod" : "POST",
@@ -295,8 +282,6 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-=======
->>>>>>> origin/master
       "rosyMethod" : "projetwcd.TinytwittEndpoint.insertTwitt",
       "request" : {
         "parameters" : {
@@ -314,118 +299,10 @@
       "response" : {
         "body" : "empty"
       }
-    },
-<<<<<<< HEAD
-    "tinytwittAPI.createNbFolloweds" : {
-      "path" : "createNbFolloweds/{nbFollowed}/{follower}",
-      "httpMethod" : "POST",
-=======
-    "tinytwittAPI.getTimelineOf" : {
-      "path" : "twittcollection/{login}",
-      "httpMethod" : "GET",
->>>>>>> origin/master
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-<<<<<<< HEAD
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.createNbFolloweds",
-      "request" : {
-        "parameters" : {
-          "nbFollowed" : {
-            "type" : "int32",
-            "required" : true
-          },
-          "follower" : {
-=======
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.getTimelineOf",
-      "request" : {
-        "parameters" : {
-          "login" : {
->>>>>>> origin/master
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-<<<<<<< HEAD
-    "tinytwittAPI.createNbFollowers" : {
-      "path" : "createNbFollowers/{nbFollowers}/{followed}",
-=======
-    "tinytwittAPI.addSameFollower" : {
-      "path" : "addSameFollower/{loginFollowed}",
->>>>>>> origin/master
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-<<<<<<< HEAD
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.createNbFollowers",
-      "request" : {
-        "parameters" : {
-          "nbFollowers" : {
-            "type" : "int32",
-            "required" : true
-          },
-          "followed" : {
-=======
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.addSameFollower",
-      "request" : {
-        "parameters" : {
-          "loginFollowed" : {
->>>>>>> origin/master
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
-    "tinytwittAPI.getUser" : {
-      "path" : "utilisateur/{login}",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "projetwcd.TinytwittEndpoint.getUser",
-      "request" : {
-        "parameters" : {
-          "login" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
     }
   },
   "descriptor" : {
     "schemas" : {
-      "StringCollection" : {
-        "id" : "StringCollection",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          }
-        }
-      },
       "Utilisateur" : {
         "id" : "Utilisateur",
         "type" : "object",
@@ -495,7 +372,6 @@
             }
           }
         }
-<<<<<<< HEAD
       },
       "StringCollection" : {
         "id" : "StringCollection",
@@ -523,70 +399,41 @@
       }
     },
     "methods" : {
+      "projetwcd.TinytwittEndpoint.createNbFollowers" : {
+      },
+      "projetwcd.TinytwittEndpoint.createNbFolloweds" : {
+      },
       "projetwcd.TinytwittEndpoint.getUser" : {
-=======
-      }
-    },
-    "methods" : {
-      "projetwcd.TinytwittEndpoint.deleteUser" : {
+        "response" : {
+          "$ref" : "Utilisateur"
+        }
       },
-      "projetwcd.TinytwittEndpoint.addFollower" : {
-      },
-      "projetwcd.TinytwittEndpoint.makeThemTwitt" : {
+      "projetwcd.TinytwittEndpoint.getTimelineOf" : {
+        "response" : {
+          "$ref" : "TwittCollection"
+        }
       },
       "projetwcd.TinytwittEndpoint.createNbUsers" : {
         "response" : {
           "$ref" : "StringCollection"
         }
       },
-      "projetwcd.TinytwittEndpoint.createUser" : {
-      },
-      "projetwcd.TinytwittEndpoint.createNbFollowers" : {
-      },
-      "projetwcd.TinytwittEndpoint.createNbFolloweds" : {
-      },
-      "projetwcd.TinytwittEndpoint.getUserList" : {
->>>>>>> origin/master
-        "response" : {
-          "$ref" : "Utilisateur"
-        }
-      },
-<<<<<<< HEAD
-      "projetwcd.TinytwittEndpoint.createUser" : {
-      },
-      "projetwcd.TinytwittEndpoint.deleteUser" : {
+      "projetwcd.TinytwittEndpoint.makeThemTwitt" : {
       },
       "projetwcd.TinytwittEndpoint.addFollower" : {
       },
-=======
-      "projetwcd.TinytwittEndpoint.insertTwitt" : {
-      },
->>>>>>> origin/master
-      "projetwcd.TinytwittEndpoint.getTimelineOf" : {
-        "response" : {
-          "$ref" : "TwittCollection"
-        }
-      },
       "projetwcd.TinytwittEndpoint.addSameFollower" : {
+      },
+      "projetwcd.TinytwittEndpoint.deleteUser" : {
+      },
+      "projetwcd.TinytwittEndpoint.createUser" : {
       },
       "projetwcd.TinytwittEndpoint.getUserList" : {
         "response" : {
           "$ref" : "UtilisateurCollection"
         }
-<<<<<<< HEAD
       },
       "projetwcd.TinytwittEndpoint.insertTwitt" : {
-      },
-      "projetwcd.TinytwittEndpoint.createNbFolloweds" : {
-      },
-      "projetwcd.TinytwittEndpoint.createNbFollowers" : {
-      },
-      "projetwcd.TinytwittEndpoint.getUserFollowerList" : {
-        "response" : {
-          "$ref" : "UtilisateurCollection"
-        }
-=======
->>>>>>> origin/master
       }
     }
   }

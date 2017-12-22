@@ -63,7 +63,7 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 					$scope.$apply();
 					$scope.stop = new Date().getTime();
 					$scope.tempo = $scope.stop - $scope.start;
-					$scope.reponseActualisation = ($scope.reponseActualisation + $scope.tempo)/nb;
+					$scope.reponseActualisation = ($scope.reponseActualisation + $scope.tempo);
 				});
 			}
 			
@@ -77,15 +77,16 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	$scope.postTwitt = function(nb){
 		if($scope.log == true ){
 			$scope.start = new Date().getTime();
-			$scope.reponseTwitt = 0;
-			$scope.tempo=0;
+			$scope.reponseTwitt=0;
+			
 			for(var i=0;i<nb;i++){
+				$scope.tempo=0;
 				gapi.client.tinytwittAPI.insertTwitt({
 					login: $scope.author,
 					message: $scope.smessage
 				}).execute(function(resp){
 					
-					console.log(resp);
+					//console.log(resp);
 					$scope.listtwitt.push({
 						author: $scope.author,
 						message: $scope.smessage
@@ -93,7 +94,7 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 					$scope.$apply();
 					$scope.stop = new Date().getTime();
 					$scope.tempo = $scope.stop - $scope.start;
-					$scope.reponseTwitt = ($scope.reponseTwitt + $scope.tempo)/nb;
+					$scope.reponseTwitt = ($scope.reponseTwitt + $scope.tempo);
 				});
 			}
 			console.log($scope.reponseTwitt);
@@ -101,6 +102,7 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 		}else{
 			$scope.erreurLog=true;
 		}
+		$scope.reponseTwitt = $scope.reponseTwitt;
 	}
 	
 	// Ajoute un follower a l'utilisateur courant, SI un utilisateur courant est actif, et que le pseudo
