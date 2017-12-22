@@ -44,7 +44,7 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 	}
 	
 	// Recupere nb fois les tweet des follows
-	$scope.listeTwitt = function(nb){
+	$scope.listeTwitt = function(nb, nbTwitt){
 		if($scope.log == true){
 			
 			for(var i=0;i<nb;i++){
@@ -56,7 +56,11 @@ var app = angular.module('twitt',[]).controller('TController',['$scope','$window
 				}).execute(function(resp){
 					
 					console.log(resp);
-					$scope.listtwitt.push(resp.items);
+					for(int j=0; j < nbTwitt; j++){
+						if(resp.items[j] != null){
+							$scope.listtwitt.push(resp.items[j]);
+						}
+					}
 					if($scope.listtwitt == null){
 						$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
 					}
