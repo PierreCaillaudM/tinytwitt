@@ -33,14 +33,14 @@ Voici le temps moyens (sur 30 mesures) pour le post d'un twitt pour une personne
 
  100 | 1000 | 2500 
  --- | ---  | ---  
- ~900 ms| ~900 ms | ---
+ ~900 ms| ~900 ms | ~2000 ms
 
 Voici le temps moyens (sur 30 mesures) pour la récuperation de la timeline par une personne qui suit 100, 1000 et 2500 et pour les 10, 50 et 100 derniers messages.
 
   --- | 100 | 1000 | 2500
  ------ | -------------   | --------- |  ----- 
- **10**     |    ~4000       |     ~10000 ms |  ---      
- **50**     |     ---        |    ---        |  ---   
+ **10**     |    ~4000 ms      |     ~10000 ms |  ---      
+ **50**     |     ~4000 ms        |    ---        |  ---   
  **100**    |     ---        |    ---        |  ---    
 
 Etant donné que nous étions restraint par les quotas de lecture et d'ecriture du Google Cloud Plateform il nous a été impossible à l'heure actuelle de faire la mesure de temps des fonctions dans les temps imparties.
